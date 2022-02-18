@@ -1,0 +1,9 @@
+[submodule "SnakeNeuroEvolution/third_party_libs/sfml"]
+	path = SnakeNeuroEvolution/third_party_libs/sfml
+	url = https://github.com/SFML/SFML.git
+[submodule "SnakeNeuroEvolution/third_party_libs/eigen"]
+	path = SnakeNeuroEvolution/third_party_libs/eigen
+	url = https://github.com/libigl/eigen.git
+[submodule "SnakeNeuroEvolution/third_party_libs/spdlog"]
+	path = SnakeNeuroEvolution/third_party_libs/spdlog
+	url = https://github.com/gabime/spdlog.git
