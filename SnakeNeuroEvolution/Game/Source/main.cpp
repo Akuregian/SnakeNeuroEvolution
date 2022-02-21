@@ -2,9 +2,9 @@
 
 int main()
 {
-//	// Initialize Engine
-//	std::shared_ptr<NeuroEvolution::Engine> engine = std::make_shared<NeuroEvolution::Engine>();
-//
+	Render::Wrapper wrapper;
+
+
 //	// Initialize Population
 //	engine->CreatePopulation(GeneticSettings::POP_SIZE);
 //
