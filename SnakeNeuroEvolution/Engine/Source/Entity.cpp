@@ -19,11 +19,4 @@ namespace NeuroEvolution {
 		ENGINE_INIT_WARN("Entity Destroyed");
 	};
 
-	void Entity::UpdateVisionVector()
-	{
-		NeuroEvolution::VEC_D vision_vector(3, 1);
-		vision_vector << 2, 3, 1;
-		input_vector = vision_vector;
-	}
-
 };

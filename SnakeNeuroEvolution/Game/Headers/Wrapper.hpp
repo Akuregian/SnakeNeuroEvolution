@@ -4,16 +4,18 @@
 
 namespace Render {
 
-	class Wrapper
+	class Wrapper 
 	{
 	public:
 		Wrapper();
 		~Wrapper();
 
+		static void Update();
+		static void Draw();
+
 	private:
 		std::shared_ptr<NeuroEvolution::Engine> m_Engine;
 		std::shared_ptr<sf::RenderWindow> m_Window;
-
 	};
 
 }

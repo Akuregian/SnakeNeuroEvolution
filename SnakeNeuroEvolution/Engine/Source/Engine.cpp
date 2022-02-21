@@ -3,7 +3,9 @@
 namespace NeuroEvolution {
 
 	Engine::Engine()
-		: _Population(std::make_shared<Population>())
+		: m_Population(std::make_shared<Population>()),
+		  m_Seed(std::make_shared<Seed>())
+
 	{
 		ENGINE_INIT_WARN("Engine Started");
 	}
@@ -15,20 +17,20 @@ namespace NeuroEvolution {
 
 	void Engine::CreatePopulation(const int& pop_size)
 	{
-		_Population->CreatePopulationOfEntites(pop_size);
-		ENGINE_LOGGER_WARN("{0} Entities Added Too The Population", _Population->EntityPopulationSize());
+		m_Population->CreatePopulationOfEntites(pop_size);
+		ENGINE_LOGGER_WARN("{0} Entities Added Too The Population", m_Population->EntityPopulationSize());
 	}
 
 	void Engine::TrainPopulation()
 	{
 		ENGINE_LOGGER_INFO("Training Population....");
-		_Population->TrainEntities();
+		m_Population->TrainEntities();
 	}
 
 	void Engine::CreateNextGeneration()
 	{
 		ENGINE_LOGGER_INFO("Creating Next Population....");
-		_Population->CreateNextGeneration();
+		m_Population->CreateNextGeneration();
 	}
 }
 

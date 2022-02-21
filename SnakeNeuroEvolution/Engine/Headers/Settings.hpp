@@ -12,6 +12,19 @@ namespace GeneticSettings {
 
 namespace NeuralSettings {
 
-	// Neural Network
+	// Neural Network Topology
 	const std::vector<unsigned int> TOPOLOGY = { 3, 2, 1 };
+}
+
+namespace Window {
+
+	// Window Settings
+	const unsigned int Width = 1200;
+	const unsigned int Height = 800;
+}
+
+namespace Game {
+
+	// How Fast eac Frame Ticks
+	const unsigned int TickSpeed = 50;
 }

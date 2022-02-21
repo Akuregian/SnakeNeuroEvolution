@@ -18,11 +18,9 @@
 // Engine For Neural Network & Genetic Algorithm
 #pragma once
 #include "Population.hpp"
+#include "Seed.hpp"
 
 namespace NeuroEvolution {
-
-	// Forward Declarations
-	class Population;
 
 	class Engine {
 	public:
@@ -33,7 +31,8 @@ namespace NeuroEvolution {
 		void CreateNextGeneration();
 
 	private:
-		std::shared_ptr<Population> _Population;
+		std::shared_ptr<Population> m_Population;
+		std::shared_ptr<Seed> m_Seed;
 	};
 }
 

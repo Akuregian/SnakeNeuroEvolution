@@ -26,8 +26,8 @@ namespace NeuroEvolution {
 	{
 		for (unsigned int i = 0; i < _EntityPopulation.size(); i++)
 		{
-			_EntityPopulation[i]->UpdateVisionVector();
-			_EntityPopulation[i]->direction = _EntityPopulation[i]->_Brain->Train(_EntityPopulation[i]->_Brain, _EntityPopulation[i]->input_vector);
+		//	_EntityPopulation[i]->UpdateVisionVector();
+		//	_EntityPopulation[i]->direction = _EntityPopulation[i]->_Brain->Train(_EntityPopulation[i]->_Brain, _EntityPopulation[i]->input_vector);
 		}
 		ENGINE_LOGGER_INFO("All Entities Trained");
 	}

@@ -7,7 +7,7 @@ namespace Render
 		  m_Window(std::make_shared<sf::RenderWindow>())
 	{
 		ENGINE_INIT_WARN("Wrapper Instanstiated");
-		m_Window->create(sf::VideoMode(1200, 800), "SnakeNeuroEvolution");
+		m_Window->create(sf::VideoMode(Window::Width, Window::Height), "SnakeNeuroEvolution");
 		m_Engine->CreatePopulation(GeneticSettings::POP_SIZE);
 	}
 
