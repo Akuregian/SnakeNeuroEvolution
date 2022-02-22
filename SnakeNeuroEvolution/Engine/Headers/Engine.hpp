@@ -18,7 +18,6 @@
 // Engine For Neural Network & Genetic Algorithm
 #pragma once
 #include "Population.hpp"
-#include "Seed.hpp"
 
 namespace NeuroEvolution {
 
@@ -28,11 +27,10 @@ namespace NeuroEvolution {
 		~Engine();
 		void CreatePopulation(const int& pop_size);
 		void TrainPopulation();
-		void CreateNextGeneration();
-
+		unsigned int& CurrentGeneration() { return m_Population->current_generation; };
+		std::shared_ptr<NeuroEvolution::Entity>& TopSnake() { return m_Population->ReplaySnake; };
 	private:
 		std::shared_ptr<Population> m_Population;
-		std::shared_ptr<Seed> m_Seed;
 	};
 }
 

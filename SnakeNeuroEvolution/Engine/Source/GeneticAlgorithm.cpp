@@ -7,6 +7,7 @@ namespace NeuroEvolution {
 		NeuroEvolution::Logger::Init();
 		ENGINE_INIT_WARN("GeneticAlgorithm Initialized");
 	}
+
 	GeneticAlgorithm::~GeneticAlgorithm()
 	{
 		ENGINE_INIT_WARN("Genetic Algorithm Object Destroyed");
@@ -180,6 +181,7 @@ namespace NeuroEvolution {
 		
 		ENGINE_LOGGER_INFO("Mutated Weights");
 	}
+
 	void GeneticAlgorithm::GausssianMutation(NeuroEvolution::VEC_D& child_bias)
 	{
 		//-------------------------- FIX -----------------------------------------
@@ -202,4 +204,5 @@ namespace NeuroEvolution {
 
 		ENGINE_LOGGER_INFO("Mutated Bias");
 	}
+
 }

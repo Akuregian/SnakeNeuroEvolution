@@ -2,6 +2,7 @@
 #include "Eigen/Core"
 #include "Settings.hpp"
 #include "Logger.hpp"
+#include "Seed.hpp"
 
 namespace NeuroEvolution {
 
@@ -27,8 +28,9 @@ namespace NeuroEvolution {
 		NeuralNetwork(std::vector<unsigned int> topology);
 		NeuralNetwork(std::vector<MAT_D>& w1, std::vector<VEC_D>& b1);
 		void CreateNeuralNetwork(const std::vector<unsigned int> topology);
-		const int& ForwardPropagate(std::shared_ptr<NeuroEvolution::NeuralNetwork>& net, VEC_D& input_vector);
-		const int& Train(std::shared_ptr<NeuroEvolution::NeuralNetwork>& net, VEC_D& input_vector);
+		const int& ForwardPropagate(VEC_D& input_vector);
+
+		// Logging
 		void PrintNetworkToConsole();
 
 		// Activation Functions

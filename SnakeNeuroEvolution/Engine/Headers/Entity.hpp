@@ -12,32 +12,33 @@ namespace NeuroEvolution {
 	public:
 		Entity(const std::vector<unsigned int>& topology);
 		Entity(std::vector<MAT_D>& w1, std::vector<VEC_D>& b1);
+		Entity& operator=(const Entity& Other);
 		~Entity();
 
-		// Initialize the Snake on the GameBoard
+		// Initialize the Snake
 		void InitializeSnake();
-		void InitializeNeuralNetwork(const std::vector<MAT_D>& w1, const std::vector<VEC_D>& b1);
+	//	void InitializeNeuralNetwork(const std::vector<MAT_D>& w1, const std::vector<VEC_D>& b1);
 
 		// Vision
-		MAT_D LookIn8Directions();
+		const VEC_D& LookIn8Directions();
 
 		// Head Direction (1 Hot Encoded)
-		MAT_D CurrentDirection();
+		const VEC_D& CurrentDirection();
 
-		// Tail Direction (1 Hot Encoded)
-		MAT_D CurrentTailDirection();
+		//Tail Direction (1 Hot Encoded)
+		const VEC_D& CurrentTailDirection();
 
 		// Generate Input: LookIn8Directions-> CurrentDirection-> CurrentTailDirection
-		MAT_D GenerateInputVector();
+		void GenerateInputVector();
 
 		// Move: Pop Tail to create the illusion of Moving Around
 		bool Move(Point& nextMove);
 
-		// Initialize Seed: Random or choose a previous seed
-		void Initialize_Seed();
+	//	// Initialize Seed: Random or choose a previous seed
+	//	void Initialize_Seed();
 
 		// Generate Random Food Location
-		Point GenerateFood();
+		void GenerateFood(Point& point);
 
 		// Update: Increment Steps, Look(), FeedForward i.e Think(), and Select the Ouputs Direction
 		void Update();
@@ -47,14 +48,13 @@ namespace NeuroEvolution {
 		bool isAppleLocation(Point& new_head_position);
 
 		// Input Vector
-		NeuroEvolution::VEC_D input_vector;
+		VEC_D input_vector;
 
 		std::shared_ptr<NeuroEvolution::NeuralNetwork> _Brain;
 
 		bool isAlive;
 		int lifeSpan; // How Long Snake can live in the population, After Each Generation
 		int score; // The Snakes Score For Each game
-		double fitness; // Snakes Fitness
 		int steps; // How many Steps the snake took
 		int steps_since_last_apple; // How Many steps the snake can take without eating
 		int curr_dir;
@@ -65,8 +65,7 @@ namespace NeuroEvolution {
 		std::deque<Point> Segments;
 
 		// For Seeding
-//		Seed seed;
-//		uint32_t seed_value = NULL;
+		uint32_t seed_value = NULL;
 
 		// TargetFood
 		Point TargetFood;
@@ -79,7 +78,6 @@ namespace NeuroEvolution {
 		const Point LEFT = std::make_pair(-1, 0);
 		const Point RIGHT = std::make_pair(1, 0);
 		const Point DETERMINE = std::make_pair(0, 0); // Determines the Next Move And Chooses Direction
-
 		const std::vector<Point> MOVES = { UP, DOWN, LEFT, RIGHT, DETERMINE };
 
 		// Next Move
@@ -98,5 +96,4 @@ namespace NeuroEvolution {
 		  { -1, 1 }   // Bottom Left Diagonal
 		};
 	};
-
 }

@@ -1,17 +1,11 @@
 #include "../Headers/Wrapper.hpp"
 
-int main()
+int main(int argc, char* argv[])
 {
-	Render::Wrapper wrapper;
 
+	std::unique_ptr<Render::Wrapper> wrapper = std::make_unique<Render::Wrapper>();
+	wrapper->Simulate();
 
-//	// Initialize Population
-//	engine->CreatePopulation(GeneticSettings::POP_SIZE);
-//
-//	// Train... Then Create New.. Train Again... Create New
-//	engine->TrainPopulation();
-//	engine->CreateNextGeneration();
-//
 	std::cin.get();
 	return 0;
 }

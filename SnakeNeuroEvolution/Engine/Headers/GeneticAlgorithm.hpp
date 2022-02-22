@@ -25,6 +25,9 @@ namespace NeuroEvolution {
 		// Mutation of Weights or Bias's
 		static void GausssianMutation(NeuroEvolution::MAT_D& child_weights);
 		static void GausssianMutation(NeuroEvolution::VEC_D& child_bias);
+
+		// Print Results to Console
+		static void Results();
 	};
 
 }

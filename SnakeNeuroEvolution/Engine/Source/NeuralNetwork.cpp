@@ -96,7 +96,7 @@ namespace NeuroEvolution {
 		std::cout << std::endl;
 	}
 
-	const int& NeuralNetwork::ForwardPropagate(std::shared_ptr<NeuroEvolution::NeuralNetwork>& net, VEC_D& input) {
+	const int& NeuralNetwork::ForwardPropagate(VEC_D& input) {
 		// Set The input too the input Neuron layer
 		_Neurons.front().block(0, 0, _Neurons.front().rows(), _Neurons.front().cols()) = input;
 
@@ -120,19 +120,6 @@ namespace NeuroEvolution {
 		_Neurons.back().maxCoeff(&Max_Coeff_Row, &MaxCoeff_Col);
 
 		return Max_Coeff_Row;
-	}
-
-	const int& NeuralNetwork::Train(std::shared_ptr<NeuroEvolution::NeuralNetwork>& net, VEC_D& input_vector)
-	{
-		// Check vector size for input layer
-		if (input_vector.rows() != _Neurons[0].rows())
-		{
-			ENGINE_LOGGER_CRITICAL("Input Vector Must Be of Size: {0} x {1}", _Neurons[0].rows(), _Neurons[0].cols());
-			assert(input_vector.rows() == _Neurons[0].rows());
-		}
-
-		// Forward Propagation
-		return NeuralNetwork::ForwardPropagate(net, input_vector);
 	}
 
 	// Activation Functions
