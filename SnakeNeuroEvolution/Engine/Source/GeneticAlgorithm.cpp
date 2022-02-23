@@ -10,7 +10,7 @@ namespace NeuroEvolution {
 
 	GeneticAlgorithm::~GeneticAlgorithm()
 	{
-		ENGINE_INIT_WARN("Genetic Algorithm Object Destroyed");
+		ENGINE_INIT_ERROR("Genetic Algorithm Object Destroyed");
 	}
 	
 	const double GeneticAlgorithm::CalculateFitness(const int& steps, const int& score)
@@ -96,14 +96,14 @@ namespace NeuroEvolution {
 		// Add New Children To the next population
 		if (entity_pop.size() == GeneticSettings::MATING_POP_SIZE - 1)
 		{
-			ENGINE_LOGGER_INFO("Adding One New Children too the Population");
-			entity_pop.push_back(std::make_shared<Entity>(child_1_weights, child_1_bias));
+			ENGINE_LOGGER_INFO("Adding One New Children too the Population, {0}", entity_pop.size());
+			entity_pop.push_back(std::make_shared<Entity>(child_1_weights, child_1_bias, NULL));
 		}
 		else 
 		{
-			ENGINE_LOGGER_INFO("Adding Two New Children too the Population");
-			entity_pop.push_back(std::make_shared<Entity>(child_1_weights, child_1_bias));
-			entity_pop.push_back(std::make_shared<Entity>(child_2_weights, child_2_bias));
+			ENGINE_LOGGER_INFO("Adding Two New Children too the Population {0}", entity_pop.size());
+			entity_pop.push_back(std::make_shared<Entity>(child_1_weights, child_1_bias, NULL));
+			entity_pop.push_back(std::make_shared<Entity>(child_2_weights, child_2_bias, NULL));
 		}
 
 		assert(entity_pop.size() > GeneticSettings::POP_SIZE);

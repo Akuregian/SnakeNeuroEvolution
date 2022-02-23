@@ -9,7 +9,7 @@ namespace NeuroEvolution {
 
 	NeuralNetwork::~NeuralNetwork()
 	{
-		ENGINE_INIT_WARN("NeuralNetwork Object Destroyed");
+		ENGINE_INIT_ERROR("NeuralNetwork Object Destroyed");
 	}
 
 	NeuralNetwork::NeuralNetwork(std::vector<unsigned int> topology) 

@@ -11,7 +11,7 @@ namespace NeuroEvolution {
 
 	Population::~Population()
 	{
-		ENGINE_INIT_WARN("Population Class Destroyed");
+		ENGINE_INIT_ERROR("Population Class Destroyed");
 	}
 
 	void Population::CreatePopulationOfEntites(const int& pop_size)
@@ -58,6 +58,7 @@ namespace NeuroEvolution {
 	void Population::CreateNextGeneration()
 	{
 		ENGINE_LOGGER_INFO("Calculating Each Entity's Fitness");
+
 		for (unsigned int i = 0; i < _EntityPopulation.size(); i++) 
 		{
 			double FitnessScore = GeneticAlgorithm::CalculateFitness(_EntityPopulation[i]->steps, _EntityPopulation[i]->score);
@@ -97,21 +98,23 @@ namespace NeuroEvolution {
 			GeneticAlgorithm::CrossoverAndMutation(roulette_wheel_sum, _EntityMatingPool, _EntityPopulation);
 		}
 
+		ENGINE_LOGGER_INFO("Crossover and Mutation Completed, Current Entity PopSize: {0}", _EntityPopulation.size());
+
 		current_generation++;
 	}
 
 	void Population::Results()
 	{
-		ENGINE_LOGGER_INFO("Generation: {0}", current_generation);
-		ENGINE_LOGGER_INFO("--------------------------------------------------------");
+		ENGINE_RESULTS_LOGGER("Generation: {0}", current_generation);
+		ENGINE_RESULTS_LOGGER("--------------------------------------------------------");
 		for (unsigned i = 0; i < 1; i++) {
 
-			ENGINE_LOGGER_INFO("Score: {0}", _EntityPopulation[i]->score);
-			ENGINE_LOGGER_INFO("Network Fitness: {0}", _EntityPopulation[i]->_Brain->NetworkFitness);
+			ENGINE_RESULTS_LOGGER("Score: {0}", _EntityPopulation[i]->score);
+			ENGINE_RESULTS_LOGGER("Network Fitness: {0}", _EntityPopulation[i]->_Brain->NetworkFitness);
 		}
-		ENGINE_LOGGER_INFO("--------------------------------------------------------");
+		ENGINE_RESULTS_LOGGER("--------------------------------------------------------\n\n");
 
 		// Top Snake
-		ReplaySnake = std::make_shared<Entity>(_EntityPopulation.front()->_Brain->_Weights, _EntityPopulation.front()->_Brain->_Bias);
+		ReplaySnake = std::make_shared<Entity>(_EntityPopulation.front()->_Brain->_Weights, _EntityPopulation.front()->_Brain->_Bias, _EntityPopulation.front()->seed_value);
 	}
 }

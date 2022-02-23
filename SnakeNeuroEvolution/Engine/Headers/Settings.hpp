@@ -24,8 +24,8 @@ namespace GameSettings {
 namespace GeneticSettings {
 
 	// Genetic Algorithm 
-	const int POP_SIZE = 2; // 500
-	const int MATING_POP_SIZE = 4; // 250
+	const int POP_SIZE = 100; // 250
+	const int MATING_POP_SIZE = 200; // 500
 
 	// Mutation Rate
 	const double MUTATION_RATE = 0.05;

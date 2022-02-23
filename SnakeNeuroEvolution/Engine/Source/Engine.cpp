@@ -12,7 +12,7 @@ namespace NeuroEvolution {
 
 	Engine::~Engine()
 	{
-		ENGINE_INIT_WARN("Engine Object Destroyed");
+		ENGINE_INIT_ERROR("Engine Object Destroyed");
 	}
 
 	void Engine::CreatePopulation(const int& pop_size)

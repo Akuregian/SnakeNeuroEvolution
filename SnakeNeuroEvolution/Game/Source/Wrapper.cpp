@@ -37,7 +37,7 @@ namespace Render
 				// =============== Create the Snake Objects ================
 				std::shared_ptr<sf::RectangleShape> snakeObject = std::make_shared<sf::RectangleShape>();
 				snakeObject->setSize( _CellSize );
-				snakeObject->setPosition(sf::Vector2f((m_Engine->TopSnake()->Segments[j].first * _CellSize.x), (m_Engine->TopSnake()->Segments[j].second * _CellSize.y + 10)));
+				snakeObject->setPosition(sf::Vector2f((m_Engine->TopSnake()->Segments[j].first * _CellSize.x) + 10, (m_Engine->TopSnake()->Segments[j].second * _CellSize.y + 10)));
 				snakeObject->setOutlineThickness(1);
 				snakeObject->setOutlineColor(sf::Color::White);
 				if (j == m_Engine->TopSnake()->Segments.size() - 1) {
@@ -54,7 +54,7 @@ namespace Render
 			// ================ Create the Food Objects ==================
 			std::shared_ptr<sf::RectangleShape> FoodObject = std::make_shared<sf::RectangleShape>();
 			FoodObject->setSize({ _CellSize.x, _CellSize.y });
-			FoodObject->setPosition(sf::Vector2f((m_Engine->TopSnake()->TargetFood.first * _CellSize.x), ((m_Engine->TopSnake()->TargetFood.second * _CellSize.y)) + 10));
+			FoodObject->setPosition(sf::Vector2f((m_Engine->TopSnake()->TargetFood.first * _CellSize.x) + 10, ((m_Engine->TopSnake()->TargetFood.second * _CellSize.y)) + 10));
 			FoodObject->setOutlineThickness(1);
 			FoodObject->setOutlineColor(sf::Color::White);
 			FoodObject->setFillColor(sf::Color(0, 255, 0, 255));
@@ -66,6 +66,7 @@ namespace Render
 	void Wrapper::ReplayBestSnake() {
 	//	if (TopScore > PreviousScore || LoadSnake) {
 	//		PreviousScore = TopScore;
+		ENGINE_LOGGER_INFO("Replaying Snake");
 			while (m_Engine->TopSnake()->isAlive) {
 				if (m_Clock->getElapsedTime().asMilliseconds() > GameSettings::TickSpeed) {
 					m_Clock->restart();
@@ -126,21 +127,21 @@ namespace Render
 				if (events.type == sf::Event::Closed) {
 					m_Window->close();
 				}
-
-				if (!LoadSnake)
-				{
-					ENGINE_LOGGER_INFO("Training Snakes with GUI");
-					m_Engine->TrainPopulation();
-					Wrapper::ReplayBestSnake();
-				}
-				else
-				{
-					ENGINE_LOGGER_INFO("Loading Snake");
-				//	m_Engine->LoadSnake();
-				//	m_Engine->ReplayTopSnake();
-				}
-
 			}
+
+			if (!LoadSnake)
+			{
+				ENGINE_LOGGER_INFO("Training Snakes with GUI");
+				m_Engine->TrainPopulation();
+				Wrapper::ReplayBestSnake();
+			}
+			else
+			{
+				ENGINE_LOGGER_INFO("Loading Snake");
+			//	m_Engine->LoadSnake();
+			//	m_Engine->ReplayTopSnake();
+			}
+
 		}
 
 		while (m_Engine->CurrentGeneration() < GeneticSettings::MAX_GENERATIONS)

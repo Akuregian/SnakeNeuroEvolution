@@ -11,17 +11,25 @@ namespace NeuroEvolution {
 	};
 
 	// Entity Created from Previous Weights/Bias
-	Entity::Entity(std::vector<MAT_D>& w1, std::vector<VEC_D>& b1)
+	Entity::Entity(std::vector<MAT_D>& w1, std::vector<VEC_D>& b1, unsigned int seed)
 		: _Brain(std::make_shared<NeuroEvolution::NeuralNetwork>(w1, b1, NeuralSettings::TOPOLOGY))
 	{
 		ENGINE_INIT_WARN("Entity created from Two parents");
+
+		if (seed != NULL)
+		{
+			seed_value = seed;
+		}
+
 		Entity::InitializeSnake(w1, b1);
 	};
 
+	// NOTE@ May not need a Copy Constructer Anymore.....
 	Entity& Entity::operator=(const Entity& Other)
 	{
 		if (&Other != this)
 		{
+			ENGINE_LOGGER_CRITICAL("Copy Constructer Called");
 			score = Other.score;
 			_Brain = Other._Brain;
 			Segments = Other.Segments;
@@ -33,7 +41,7 @@ namespace NeuroEvolution {
 
 	Entity::~Entity()
 	{
-		ENGINE_INIT_WARN("Entity Destroyed");
+		ENGINE_INIT_ERROR("Entity Destroyed");
 	};
 
 	void Entity::InitializeSnake(const std::vector<MAT_D>& w1, const std::vector<VEC_D>& b1)
@@ -41,11 +49,8 @@ namespace NeuroEvolution {
 
 		if (seed_value == NULL)
 		{
+			NEW_SEED;
 			seed_value = Seed::GetInstance()->GetSeed();
-		}
-		else
-		{
-			SET_SEED(seed_value);
 		}
 
 		this-> isAlive = true;
@@ -151,11 +156,6 @@ namespace NeuroEvolution {
 			steps_since_last_apple = 0;
 			Segments.push_back(NewHeadPosition);
 			GenerateFood(TargetFood);
-			// TODO: Not the Most Elegent Solution, Can be re-worked
-			if (TargetFood.first == -1 && TargetFood.second == -1) 
-			{
-				return false;
-			}
 		}
 		else 
 		{
