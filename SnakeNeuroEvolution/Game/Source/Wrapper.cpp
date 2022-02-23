@@ -4,7 +4,8 @@ namespace Render
 {
 	Wrapper::Wrapper()
 		: m_Engine(std::make_shared<NeuroEvolution::Engine>()),
-		  m_Window(std::make_shared<sf::RenderWindow>())
+		  m_Window(std::make_shared<sf::RenderWindow>()),
+		  m_Clock(std::make_shared<sf::Clock>())
 	{
 		ENGINE_INIT_WARN("Wrapper Instanstiated");
 		m_Engine->CreatePopulation(GeneticSettings::POP_SIZE);
@@ -26,13 +27,16 @@ namespace Render
 
 	void Wrapper::CreateObjects()
 	{
-		sf::Vector2f _CellSize = { 20, 20 };
+
+		GameObjects.clear();
+
+		sf::Vector2f _CellSize(20, 20);
 		// If its Alive
 		if (m_Engine->TopSnake()->isAlive) {
 			for (int j = 0; j < m_Engine->TopSnake()->Segments.size(); j++) {
 				// =============== Create the Snake Objects ================
-				std::shared_ptr<sf::RectangleShape> snakeObject;
-				snakeObject->setSize( { _CellSize.x, _CellSize.y } );
+				std::shared_ptr<sf::RectangleShape> snakeObject = std::make_shared<sf::RectangleShape>();
+				snakeObject->setSize( _CellSize );
 				snakeObject->setPosition(sf::Vector2f((m_Engine->TopSnake()->Segments[j].first * _CellSize.x), (m_Engine->TopSnake()->Segments[j].second * _CellSize.y + 10)));
 				snakeObject->setOutlineThickness(1);
 				snakeObject->setOutlineColor(sf::Color::White);
@@ -48,7 +52,7 @@ namespace Render
 			}
 
 			// ================ Create the Food Objects ==================
-			std::shared_ptr<sf::RectangleShape> FoodObject;
+			std::shared_ptr<sf::RectangleShape> FoodObject = std::make_shared<sf::RectangleShape>();
 			FoodObject->setSize({ _CellSize.x, _CellSize.y });
 			FoodObject->setPosition(sf::Vector2f((m_Engine->TopSnake()->TargetFood.first * _CellSize.x), ((m_Engine->TopSnake()->TargetFood.second * _CellSize.y)) + 10));
 			FoodObject->setOutlineThickness(1);
@@ -57,6 +61,39 @@ namespace Render
 			// Add to the GameObjects
 			GameObjects.push_back(FoodObject);
 		}
+	}
+
+	void Wrapper::ReplayBestSnake() {
+	//	if (TopScore > PreviousScore || LoadSnake) {
+	//		PreviousScore = TopScore;
+			while (m_Engine->TopSnake()->isAlive) {
+				if (m_Clock->getElapsedTime().asMilliseconds() > GameSettings::TickSpeed) {
+					m_Clock->restart();
+					m_Engine->TopSnake()->Update();
+
+				//	if (Replay_Snake->score > TopScore) {
+				//		TopScore = Replay_Snake->score;
+				//	}
+
+				//	if (Replay_Snake->Segments.size() == (Settings::COLS * Settings::ROWS)) {
+				//		std::cout << "Snake Died or Completed Game" << std::endl;
+				//		std::cin.get();
+				//	}
+				//	Update();
+				//	Draw();
+					Wrapper::CreateObjects();
+					Wrapper::DrawObjects();
+				}
+			}
+	//	}
+//		else {
+//			m_win.clear();
+//			ShowText();
+//			m_win.draw(Training_Text);
+//			DrawNeuralNetwork();
+//			m_win.display();
+//		}
+//		delete Replay_Snake;
 	}
 
 	void Wrapper::DrawObjects()
@@ -94,7 +131,7 @@ namespace Render
 				{
 					ENGINE_LOGGER_INFO("Training Snakes with GUI");
 					m_Engine->TrainPopulation();
-					DrawObjects();
+					Wrapper::ReplayBestSnake();
 				}
 				else
 				{

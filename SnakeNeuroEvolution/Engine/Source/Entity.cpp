@@ -7,14 +7,15 @@ namespace NeuroEvolution {
 		: _Brain(std::make_shared<NeuroEvolution::NeuralNetwork>(topology))
 	{
 		ENGINE_INIT_WARN("Entity Created");
-		Entity::InitializeSnake();
+		Entity::InitializeSnake({}, {});
 	};
 
 	// Entity Created from Previous Weights/Bias
 	Entity::Entity(std::vector<MAT_D>& w1, std::vector<VEC_D>& b1)
-		: _Brain(std::make_shared<NeuroEvolution::NeuralNetwork>(w1, b1))
+		: _Brain(std::make_shared<NeuroEvolution::NeuralNetwork>(w1, b1, NeuralSettings::TOPOLOGY))
 	{
 		ENGINE_INIT_WARN("Entity created from Two parents");
+		Entity::InitializeSnake(w1, b1);
 	};
 
 	Entity& Entity::operator=(const Entity& Other)
@@ -35,8 +36,9 @@ namespace NeuroEvolution {
 		ENGINE_INIT_WARN("Entity Destroyed");
 	};
 
-	void Entity::InitializeSnake()
+	void Entity::InitializeSnake(const std::vector<MAT_D>& w1, const std::vector<VEC_D>& b1)
 	{
+
 		if (seed_value == NULL)
 		{
 			seed_value = Seed::GetInstance()->GetSeed();
@@ -46,6 +48,13 @@ namespace NeuroEvolution {
 			SET_SEED(seed_value);
 		}
 
+		this-> isAlive = true;
+		this->lifeSpan = 100; 
+		this->score = 0; 
+		this->steps = 0; 
+		this->steps_since_last_apple = 0; 
+		this->curr_dir = 4;
+		this->brightness = 255;
 		this->colorlist[0] = std::rand() % 255;
 		this->colorlist[1] = std::rand() % 255;
 		this->colorlist[2] = std::rand() % 255;
@@ -58,7 +67,7 @@ namespace NeuroEvolution {
 		GenerateFood(TargetFood);
 	}
 
-	const VEC_D& Entity::LookIn8Directions()
+	const VEC_D Entity::LookIn8Directions()
 	{
 		VEC_D VisionInput(24, 1);
 		std::vector<double> vision_values;
@@ -194,7 +203,7 @@ namespace NeuroEvolution {
 		point = FoodLocation;
 	}
 
-	const VEC_D& Entity::CurrentDirection()
+	const VEC_D Entity::CurrentDirection()
 	{
 		VEC_D DirectionInput(4, 1);
 
@@ -221,7 +230,7 @@ namespace NeuroEvolution {
 		return DirectionInput;
 	}
 
-	const VEC_D& Entity::CurrentTailDirection()
+	const VEC_D Entity::CurrentTailDirection()
 	{
 		VEC_D TailDirectionInput(4, 1);
 		if (Segments.size() > 1) {

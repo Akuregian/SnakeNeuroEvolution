@@ -12,6 +12,7 @@ namespace NeuroEvolution {
 		static uint32_t GetSeed();
 		static void setSeed(uint32_t seed);
 		static void GenerateNewSeed();
+		static std::mt19937 Generator() { return m_Generator; };
 
 		static uint32_t curr_seed;
 		static std::mt19937 m_Generator;

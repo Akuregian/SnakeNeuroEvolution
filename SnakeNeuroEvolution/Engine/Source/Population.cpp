@@ -28,10 +28,10 @@ namespace NeuroEvolution {
 		{
 			if (_EntityPopulation[i]->isAlive)
 			{
-				return true;
+				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	void Population::Update()
@@ -52,6 +52,7 @@ namespace NeuroEvolution {
 		ENGINE_LOGGER_INFO("All Entities Trained");
 
 		Population::CreateNextGeneration();
+		Population::Results();
 	}
 
 	void Population::CreateNextGeneration()
@@ -63,11 +64,14 @@ namespace NeuroEvolution {
 			_EntityPopulation[i]->_Brain->NetworkFitness = FitnessScore;
 		}
 
+		// Clear MatingPool
+		_EntityMatingPool.clear();
+
 		// Sort 'Elites' by fitness
 		GeneticAlgorithm::ElitismSelection(_EntityPopulation);
 
 		// Store 'Elites' into MatingPool
-		for (unsigned int i = 0; i < GeneticSettings::MATING_POP_SIZE; i++)
+		for (unsigned int i = 0; i < GeneticSettings::POP_SIZE; i++)
 		{
 			_EntityMatingPool.push_back(_EntityPopulation[i]);
 		}
@@ -88,7 +92,7 @@ namespace NeuroEvolution {
 
 		_EntityPopulation = _EntityMatingPool;
 
-		while (_EntityPopulation.size() < GeneticSettings::POP_SIZE)
+		while (_EntityPopulation.size() < GeneticSettings::MATING_POP_SIZE)
 		{
 			GeneticAlgorithm::CrossoverAndMutation(roulette_wheel_sum, _EntityMatingPool, _EntityPopulation);
 		}
@@ -108,6 +112,6 @@ namespace NeuroEvolution {
 		ENGINE_LOGGER_INFO("--------------------------------------------------------");
 
 		// Top Snake
-		ReplaySnake = _EntityPopulation.front();
+		ReplaySnake = std::make_shared<Entity>(_EntityPopulation.front()->_Brain->_Weights, _EntityPopulation.front()->_Brain->_Bias);
 	}
 }

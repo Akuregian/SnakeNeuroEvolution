@@ -13,13 +13,15 @@ namespace NeuroEvolution {
 	}
 
 	NeuralNetwork::NeuralNetwork(std::vector<unsigned int> topology) 
+		: NetworkFitness(100)
 	{
 		ENGINE_INIT_WARN("NeuralNetwork Object Created");
 		NeuralNetwork::CreateNeuralNetwork(topology);
 	}
 
 	// Initialize Neural Network with Previous Weights and Bias Values
-	NeuralNetwork::NeuralNetwork(std::vector<MAT_D>& w1, std::vector<VEC_D>& b1) 
+	NeuralNetwork::NeuralNetwork(std::vector<MAT_D>& w1, std::vector<VEC_D>& b1, std::vector<unsigned int> topology)
+		: _Topology(topology)
 	{
 
 		ENGINE_INIT_WARN("NeuralNetwork Object Created from TWO PARENTS");
@@ -97,6 +99,7 @@ namespace NeuroEvolution {
 	}
 
 	const int& NeuralNetwork::ForwardPropagate(VEC_D& input) {
+
 		// Set The input too the input Neuron layer
 		_Neurons.front().block(0, 0, _Neurons.front().rows(), _Neurons.front().cols()) = input;
 

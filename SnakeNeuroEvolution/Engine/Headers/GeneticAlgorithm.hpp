@@ -13,6 +13,8 @@ namespace NeuroEvolution {
 	public:
 		GeneticAlgorithm();
 		~GeneticAlgorithm();
+
+	protected:
 		static const double CalculateFitness(const int& steps, const int& score);
 		static void ElitismSelection(std::vector<std::shared_ptr<Entity>>& curr_pop);
 		static Parents RouletteWheel(const double& roulette_wheel_sum, std::vector<std::shared_ptr<Entity>>& mating_pop);

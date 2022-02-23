@@ -34,12 +34,8 @@ namespace NeuroEvolution {
 		unsigned parent_1 = NULL;
 		unsigned parent_2 = NULL;
 
-		std::uniform_real_distribution<double> RandomNumber(0, roulette_wheel_sum);
-		std::random_device rd;
-		std::mt19937 Generator(rd());
-
 		for (unsigned i = 0; i < 2; i++) {
-			double pick = RandomNumber(Generator);
+			double pick = std::uniform_real_distribution<double> (0, roulette_wheel_sum)(Seed::GetInstance()->Generator());
 			double current = 0;
 			for (unsigned pop_index = 0; pop_index < GeneticSettings::POP_SIZE; pop_index++) {
 				current += mating_pop[i]->_Brain->NetworkFitness;
@@ -98,7 +94,7 @@ namespace NeuroEvolution {
 		}
 
 		// Add New Children To the next population
-		if (entity_pop.size() == GeneticSettings::POP_SIZE - 1)
+		if (entity_pop.size() == GeneticSettings::MATING_POP_SIZE - 1)
 		{
 			ENGINE_LOGGER_INFO("Adding One New Children too the Population");
 			entity_pop.push_back(std::make_shared<Entity>(child_1_weights, child_1_bias));
@@ -110,7 +106,7 @@ namespace NeuroEvolution {
 			entity_pop.push_back(std::make_shared<Entity>(child_2_weights, child_2_bias));
 		}
 
-		assert(entity_pop.size() <= GeneticSettings::POP_SIZE);
+		assert(entity_pop.size() > GeneticSettings::POP_SIZE);
 	}
 	
 	// Crossover of weights && bias'

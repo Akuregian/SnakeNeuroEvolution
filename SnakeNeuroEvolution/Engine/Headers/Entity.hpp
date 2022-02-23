@@ -16,17 +16,16 @@ namespace NeuroEvolution {
 		~Entity();
 
 		// Initialize the Snake
-		void InitializeSnake();
-	//	void InitializeNeuralNetwork(const std::vector<MAT_D>& w1, const std::vector<VEC_D>& b1);
+		void InitializeSnake(const std::vector<MAT_D>& w1, const std::vector<VEC_D>& b1);
 
 		// Vision
-		const VEC_D& LookIn8Directions();
+		const VEC_D LookIn8Directions();
 
 		// Head Direction (1 Hot Encoded)
-		const VEC_D& CurrentDirection();
+		const VEC_D CurrentDirection();
 
 		//Tail Direction (1 Hot Encoded)
-		const VEC_D& CurrentTailDirection();
+		const VEC_D CurrentTailDirection();
 
 		// Generate Input: LookIn8Directions-> CurrentDirection-> CurrentTailDirection
 		void GenerateInputVector();
