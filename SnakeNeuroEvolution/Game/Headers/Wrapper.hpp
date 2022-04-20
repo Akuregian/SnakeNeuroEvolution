@@ -13,6 +13,7 @@ namespace Render {
 		void InitWindow();
 		void Simulate();
 		void CreateObjects();
+		void ReplayAllSnakes();
 		void ReplayBestSnake();
 		void DrawObjects();
 

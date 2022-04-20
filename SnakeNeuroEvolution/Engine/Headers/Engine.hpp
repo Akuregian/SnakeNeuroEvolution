@@ -29,6 +29,7 @@ namespace NeuroEvolution {
 		void TrainPopulation();
 		unsigned int& CurrentGeneration() { return m_Population->current_generation; };
 		std::shared_ptr<NeuroEvolution::Entity>& TopSnake() { return m_Population->ReplaySnake; };
+
 	private:
 		std::shared_ptr<Population> m_Population;
 	};

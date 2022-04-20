@@ -63,6 +63,7 @@ namespace Render
 		}
 	}
 
+
 	void Wrapper::ReplayBestSnake() {
 	//	if (TopScore > PreviousScore || LoadSnake) {
 	//		PreviousScore = TopScore;

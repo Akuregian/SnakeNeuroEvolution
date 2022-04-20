@@ -40,12 +40,12 @@ namespace NeuroEvolution {
 			for (unsigned pop_index = 0; pop_index < GeneticSettings::POP_SIZE; pop_index++) {
 				current += mating_pop[i]->_Brain->NetworkFitness;
 					if (current >= pick) {
-					if (parent_1 == NULL) {
-						parent_1 = pop_index;
-					}
-					else {
-						parent_2 = pop_index;
-					}
+						if (parent_1 == NULL) {
+							parent_1 = pop_index;
+						}
+						else {
+							parent_2 = pop_index;
+						}
 					break;
 				}
 			}

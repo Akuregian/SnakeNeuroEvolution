@@ -55,6 +55,7 @@ namespace NeuroEvolution {
 	void Population::CreateNextGeneration()
 	{
 
+		// Calculate Each Snakes Fitness Score and set it too Network Fitness
 		for (unsigned int i = 0; i < _EntityPopulation.size(); i++) 
 		{
 			double FitnessScore = GeneticAlgorithm::CalculateFitness(_EntityPopulation[i]->steps, _EntityPopulation[i]->score);
@@ -67,34 +68,34 @@ namespace NeuroEvolution {
 		// Sort 'Elites' by fitness
 		GeneticAlgorithm::ElitismSelection(_EntityPopulation);
 
+		// Grabbing Roulette Wheel Sum
+		double roulette_wheel_sum = 0;
+		for (unsigned int i = 0; i < _EntityPopulation.size(); i++)
+		{
+			roulette_wheel_sum += _EntityPopulation[i]->_Brain->NetworkFitness;
+		}
+
+		// Print Results and Set the top performing Snake
+		Population::Results();
+
 		// Store 'Elites' into MatingPool
 		for (unsigned int i = 0; i < GeneticSettings::POP_SIZE; i++)
 		{
 			_EntityMatingPool.push_back(std::make_shared<Entity>(_EntityPopulation[i]->_Brain->_Weights, _EntityPopulation[i]->_Brain->_Bias, NULL));
+			_EntityMatingPool[i]->_Brain->NetworkFitness = _EntityPopulation[i]->_Brain->NetworkFitness;
 		}
-		
-		// Print Results and Set the top performing Snake
-		Population::Results();
-
-		// Clear Population of Stored Pointers, Effectivly Releasing the memory (b/c there smart pointers)
-		_EntityPopulation.clear();
-
-		ENGINE_LOGGER_INFO("Add {0} Elites To MatingPool", _EntityMatingPool.size());
-
-		// Grabbing Roulette Wheel Sum
-		double roulette_wheel_sum = 0;
-		for (unsigned int i = 0; i < _EntityMatingPool.size(); i++)
-		{
-			roulette_wheel_sum += _EntityMatingPool[i]->_Brain->NetworkFitness;
-		}
-
-		ENGINE_LOGGER_INFO("Creating Remaining Children using Top Fitness Scores");
 
 		_EntityPopulation = _EntityMatingPool;
 
 		while (_EntityPopulation.size() < GeneticSettings::MATING_POP_SIZE)
 		{
 			GeneticAlgorithm::CrossoverAndMutation(roulette_wheel_sum, _EntityMatingPool, _EntityPopulation);
+		}
+
+		for (int i = 0; i < 250; i++)
+		{
+			_EntityPopulation[i]->_Brain->NetworkFitness = 0;
+			_EntityPopulation[i]->score = 0;
 		}
 
 		ENGINE_LOGGER_INFO("Crossover and Mutation Completed, Current Entity PopSize: {0}", _EntityPopulation.size());
