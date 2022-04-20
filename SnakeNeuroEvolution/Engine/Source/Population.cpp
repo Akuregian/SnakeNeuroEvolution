@@ -49,15 +49,11 @@ namespace NeuroEvolution {
 			Update();
 		}
 
-		ENGINE_LOGGER_INFO("All Entities Trained");
-
 		Population::CreateNextGeneration();
-		Population::Results();
 	}
 
 	void Population::CreateNextGeneration()
 	{
-		ENGINE_LOGGER_INFO("Calculating Each Entity's Fitness");
 
 		for (unsigned int i = 0; i < _EntityPopulation.size(); i++) 
 		{
@@ -74,9 +70,12 @@ namespace NeuroEvolution {
 		// Store 'Elites' into MatingPool
 		for (unsigned int i = 0; i < GeneticSettings::POP_SIZE; i++)
 		{
-			_EntityMatingPool.push_back(_EntityPopulation[i]);
+			_EntityMatingPool.push_back(std::make_shared<Entity>(_EntityPopulation[i]->_Brain->_Weights, _EntityPopulation[i]->_Brain->_Bias, NULL));
 		}
 		
+		// Print Results and Set the top performing Snake
+		Population::Results();
+
 		// Clear Population of Stored Pointers, Effectivly Releasing the memory (b/c there smart pointers)
 		_EntityPopulation.clear();
 
@@ -105,6 +104,7 @@ namespace NeuroEvolution {
 
 	void Population::Results()
 	{
+		//--------------------- Print To Console ------------------------
 		ENGINE_RESULTS_LOGGER("Generation: {0}", current_generation);
 		ENGINE_RESULTS_LOGGER("--------------------------------------------------------");
 		for (unsigned i = 0; i < 1; i++) {
@@ -114,7 +114,11 @@ namespace NeuroEvolution {
 		}
 		ENGINE_RESULTS_LOGGER("--------------------------------------------------------\n\n");
 
+		//--------------------------------------------------------------
+		
+		
 		// Top Snake
-		ReplaySnake = std::make_shared<Entity>(_EntityPopulation.front()->_Brain->_Weights, _EntityPopulation.front()->_Brain->_Bias, _EntityPopulation.front()->seed_value);
+		ENGINE_RESULTS_LOGGER("TopSeed: {0}", _EntityPopulation.front()->seed_value);
+ 		ReplaySnake = std::make_shared<Entity>(_EntityPopulation.front()->_Brain->_Weights, _EntityPopulation.front()->_Brain->_Bias, _EntityPopulation.front()->seed_value);
 	}
 }

@@ -66,10 +66,15 @@ namespace Render
 	void Wrapper::ReplayBestSnake() {
 	//	if (TopScore > PreviousScore || LoadSnake) {
 	//		PreviousScore = TopScore;
+
 		ENGINE_LOGGER_INFO("Replaying Snake");
+		SET_SEED(m_Engine->TopSnake()->seed_value);
+		
 			while (m_Engine->TopSnake()->isAlive) {
 				if (m_Clock->getElapsedTime().asMilliseconds() > GameSettings::TickSpeed) {
+
 					m_Clock->restart();
+
 					m_Engine->TopSnake()->Update();
 
 				//	if (Replay_Snake->score > TopScore) {
@@ -86,6 +91,7 @@ namespace Render
 					Wrapper::DrawObjects();
 				}
 			}
+
 	//	}
 //		else {
 //			m_win.clear();
@@ -133,7 +139,8 @@ namespace Render
 			{
 				ENGINE_LOGGER_INFO("Training Snakes with GUI");
 				m_Engine->TrainPopulation();
-				Wrapper::ReplayBestSnake();
+				//Wrapper::ReplayBestSnake();
+
 			}
 			else
 			{

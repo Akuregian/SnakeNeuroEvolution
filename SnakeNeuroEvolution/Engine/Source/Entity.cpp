@@ -24,21 +24,6 @@ namespace NeuroEvolution {
 		Entity::InitializeSnake(w1, b1);
 	};
 
-	// NOTE@ May not need a Copy Constructer Anymore.....
-	Entity& Entity::operator=(const Entity& Other)
-	{
-		if (&Other != this)
-		{
-			ENGINE_LOGGER_CRITICAL("Copy Constructer Called");
-			score = Other.score;
-			_Brain = Other._Brain;
-			Segments = Other.Segments;
-			seed_value = Other.seed_value;
-		}
-
-		return *this;
-	}
-
 	Entity::~Entity()
 	{
 		ENGINE_INIT_ERROR("Entity Destroyed");

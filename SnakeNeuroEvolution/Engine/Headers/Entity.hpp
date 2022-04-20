@@ -12,7 +12,6 @@ namespace NeuroEvolution {
 	public:
 		Entity(const std::vector<unsigned int>& topology);
 		Entity(std::vector<MAT_D>& w1, std::vector<VEC_D>& b1, unsigned int seed);
-		Entity& operator=(const Entity& Other);
 		~Entity();
 
 		// Initialize the Snake
@@ -32,9 +31,6 @@ namespace NeuroEvolution {
 
 		// Move: Pop Tail to create the illusion of Moving Around
 		bool Move(Point& nextMove);
-
-	//	// Initialize Seed: Random or choose a previous seed
-	//	void Initialize_Seed();
 
 		// Generate Random Food Location
 		void GenerateFood(Point& point);

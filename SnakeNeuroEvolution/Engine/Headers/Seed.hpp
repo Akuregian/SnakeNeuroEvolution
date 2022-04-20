@@ -25,3 +25,4 @@ namespace NeuroEvolution {
 
 #define NEW_SEED NeuroEvolution::Seed::GetInstance()->GenerateNewSeed()
 #define SET_SEED(...) NeuroEvolution::Seed::GetInstance()->setSeed(__VA_ARGS__)
+#define CURRENT_SEED ENGINE_RESULTS_LOGGER(NeuroEvolution::Seed::GetInstance()->curr_seed)
