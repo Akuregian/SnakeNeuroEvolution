@@ -6,12 +6,10 @@ namespace NeuroEvolution {
 	Population::Population()
 		: current_generation(0)
 	{
-		ENGINE_INIT_WARN("Population Class Initialized");
 	}
 
 	Population::~Population()
 	{
-		ENGINE_INIT_ERROR("Population Class Destroyed");
 	}
 
 	void Population::CreatePopulationOfEntites(const int& pop_size)
@@ -92,13 +90,12 @@ namespace NeuroEvolution {
 			GeneticAlgorithm::CrossoverAndMutation(roulette_wheel_sum, _EntityMatingPool, _EntityPopulation);
 		}
 
-		for (int i = 0; i < 250; i++)
+		for (int i = 0; i < GeneticSettings::POP_SIZE; i++)
 		{
 			_EntityPopulation[i]->_Brain->NetworkFitness = 0;
 			_EntityPopulation[i]->score = 0;
 		}
 
-		ENGINE_LOGGER_INFO("Crossover and Mutation Completed, Current Entity PopSize: {0}", _EntityPopulation.size());
 
 		current_generation++;
 	}

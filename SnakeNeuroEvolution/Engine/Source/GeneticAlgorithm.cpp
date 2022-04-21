@@ -5,12 +5,10 @@ namespace NeuroEvolution {
 	GeneticAlgorithm::GeneticAlgorithm()
 	{
 		NeuroEvolution::Logger::Init();
-		ENGINE_INIT_WARN("GeneticAlgorithm Initialized");
 	}
 
 	GeneticAlgorithm::~GeneticAlgorithm()
 	{
-		ENGINE_INIT_ERROR("Genetic Algorithm Object Destroyed");
 	}
 	
 	const double GeneticAlgorithm::CalculateFitness(const int& steps, const int& score)
@@ -22,7 +20,6 @@ namespace NeuroEvolution {
 
 	void GeneticAlgorithm::ElitismSelection(std::vector<std::shared_ptr<Entity>>& curr_pop)
 	{
-		ENGINE_LOGGER_INFO("Sorting Population By Fitness Scores");
 		std::sort(curr_pop.begin(), curr_pop.end(), [](const std::shared_ptr<Entity> lhs, const std::shared_ptr<Entity> rhs)
 		{ 
 			return lhs->_Brain->NetworkFitness > rhs->_Brain->NetworkFitness; 
@@ -96,12 +93,10 @@ namespace NeuroEvolution {
 		// Add New Children To the next population
 		if (entity_pop.size() == GeneticSettings::MATING_POP_SIZE - 1)
 		{
-			ENGINE_LOGGER_INFO("Adding One New Children too the Population, {0}", entity_pop.size());
 			entity_pop.push_back(std::make_shared<Entity>(child_1_weights, child_1_bias, NULL));
 		}
 		else 
 		{
-			ENGINE_LOGGER_INFO("Adding Two New Children too the Population {0}", entity_pop.size());
 			entity_pop.push_back(std::make_shared<Entity>(child_1_weights, child_1_bias, NULL));
 			entity_pop.push_back(std::make_shared<Entity>(child_2_weights, child_2_bias, NULL));
 		}
@@ -112,16 +107,11 @@ namespace NeuroEvolution {
 	// Crossover of weights && bias'
 	NewChildWeights GeneticAlgorithm::SinglePointCrossover(const NeuroEvolution::MAT_D& w1, const NeuroEvolution::MAT_D& w2)
 	{
-		ENGINE_LOGGER_INFO("SinglePoint Crossover {Weights}");
-
-		// AGAIN...........................
-		std::random_device rd;
-		std::mt19937 generator(rd());
 
 		int rows = w1.rows();
 		int cols = w1.cols();
-		int randomRow = std::uniform_int_distribution<int>(0, rows - 1)(generator);
-		int randomCol = std::uniform_int_distribution<int>(0, cols - 1)(generator);
+		int randomRow = std::uniform_int_distribution<int>(0, rows - 1)(Seed::GetInstance()->Generator());
+		int randomCol = std::uniform_int_distribution<int>(0, cols - 1)(Seed::GetInstance()->Generator());
 
 		Eigen::MatrixXd child_1 = w1;
 		Eigen::MatrixXd child_2 = w2;
@@ -134,17 +124,8 @@ namespace NeuroEvolution {
 
 	NewChildBias GeneticAlgorithm::SinglePointCrossover(const NeuroEvolution::VEC_D& b1, const NeuroEvolution::VEC_D& b2)
 	{
-		ENGINE_LOGGER_INFO("SinglePoint Crossover {Bias}");
-
-		//-------------------------- FIX -----------------------------------------
-		std::random_device rd;
-		std::mt19937 generator(rd());
-		//------------------------------------------------------------------------
-
-
 		int rows = b1.rows();
-		int randomRow = std::uniform_int_distribution<int>(0, rows - 1)(generator);
-
+		int randomRow = std::uniform_int_distribution<int>(0, rows - 1)(Seed::GetInstance()->Generator());
 		Eigen::MatrixXd child_1 = b1;
 		Eigen::MatrixXd child_2 = b2;
 
@@ -175,30 +156,24 @@ namespace NeuroEvolution {
 		// Add The Randomly Created Matrix *= Scale to the Original Matrix (Update Weights || Bias Matrix)
 		child_weights = (random_chance.array() < GeneticSettings::MUTATION_RATE).select(mutation, child_weights);
 		
-		ENGINE_LOGGER_INFO("Mutated Weights");
 	}
 
 	void GeneticAlgorithm::GausssianMutation(NeuroEvolution::VEC_D& child_bias)
 	{
-		//-------------------------- FIX -----------------------------------------
-		std::random_device rd;
-		std::mt19937 generator(rd());
 		std::normal_distribution<double> random_normal(0.0, 1.0);
 		std::uniform_real_distribution<double> random_uniform(0.0, 1.0);
-		//------------------------------------------------------------------------
 
 		int rows = child_bias.rows();
 
 		// Determine which Genes are Going to be Mutated by using the Mutation Probability
-		NeuroEvolution::VEC_D random_chance = Eigen::VectorXd(rows).unaryExpr([&](double dummy_var) { return random_uniform(generator); });
+		NeuroEvolution::VEC_D random_chance = Eigen::VectorXd(rows).unaryExpr([&](double dummy_var) { return random_uniform(Seed::GetInstance()->Generator()); });
 
 		// Create a random Matrix using Normal Distribution (Gaussian)
-		NeuroEvolution::VEC_D mutation = Eigen::VectorXd(rows).unaryExpr([&](double dummy_var) { return random_normal(generator); }) + child_bias;
+		NeuroEvolution::VEC_D mutation = Eigen::VectorXd(rows).unaryExpr([&](double dummy_var) { return random_normal(Seed::GetInstance()->Generator()); }) + child_bias;
 
 		// Add The Randomly Created Matrix *= Scale to the Original Matrix (Update Weights || Bias Matrix)
 		child_bias = (random_chance.array() < GeneticSettings::MUTATION_RATE).select(mutation, child_bias);
 
-		ENGINE_LOGGER_INFO("Mutated Bias");
 	}
 
 }

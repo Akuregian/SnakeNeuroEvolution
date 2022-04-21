@@ -4,18 +4,15 @@ namespace NeuroEvolution {
 
 	NeuralNetwork::NeuralNetwork()
 	{
-		ENGINE_INIT_WARN("NeuralNetwork Initialized");
 	}
 
 	NeuralNetwork::~NeuralNetwork()
 	{
-		ENGINE_INIT_ERROR("NeuralNetwork Object Destroyed");
 	}
 
 	NeuralNetwork::NeuralNetwork(std::vector<unsigned int> topology) 
 		: NetworkFitness(0)
 	{
-		ENGINE_INIT_WARN("NeuralNetwork Object Created");
 		NeuralNetwork::CreateNeuralNetwork(topology);
 	}
 
@@ -24,7 +21,6 @@ namespace NeuroEvolution {
 		: _Topology(topology), NetworkFitness(0)
 	{
 
-		ENGINE_INIT_WARN("NeuralNetwork Object Created from TWO PARENTS");
 		//	std::cout << "Initialized Neural Network With Previous Weights" << std::endl;
 		for (uint64_t i = 0; i < _Topology.size(); i++) {
 			// Initialize the layers
@@ -47,13 +43,11 @@ namespace NeuroEvolution {
 		this->_Topology = topology;
 
 		if (_Topology.size() < 2) {
-			ENGINE_LOGGER_CRITICAL("Neural Network Must Contain more than 1 Layer");
 			assert(_Topology.size() > 1);
 		}
 
 		for (unsigned int i = 0; i < _Topology.size(); i++) {
 			if (_Topology[i] == 0) {
-				ENGINE_LOGGER_CRITICAL("A Layer Must Contain More Than 1 Neuron");
 				assert(_Topology[i] > 0);
 			}
 		}
@@ -77,7 +71,6 @@ namespace NeuroEvolution {
 
 	void NeuralNetwork::PrintNetworkToConsole() {
 		// ----------------Debugging-------------------
-		ENGINE_LOGGER_INFO("Printing Neurons, Weights and Bias' too the Console");
 
 		std::cout << "Neural Layers\n" << std::endl;
 		for (int i = 0; i < _Neurons.size(); i++) {

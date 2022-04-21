@@ -6,7 +6,6 @@ namespace NeuroEvolution {
 	Entity::Entity(const std::vector<unsigned int>& topology)
 		: _Brain(std::make_shared<NeuroEvolution::NeuralNetwork>(topology))
 	{
-		ENGINE_INIT_WARN("Entity Created");
 		Entity::InitializeSnake({}, {});
 	};
 
@@ -14,7 +13,6 @@ namespace NeuroEvolution {
 	Entity::Entity(std::vector<MAT_D>& w1, std::vector<VEC_D>& b1, unsigned int seed)
 		: _Brain(std::make_shared<NeuroEvolution::NeuralNetwork>(w1, b1, NeuralSettings::TOPOLOGY))
 	{
-		ENGINE_INIT_WARN("Entity created from Two parents");
 
 		if (seed != NULL)
 		{
@@ -26,7 +24,6 @@ namespace NeuroEvolution {
 
 	Entity::~Entity()
 	{
-		ENGINE_INIT_ERROR("Entity Destroyed");
 	};
 
 	void Entity::InitializeSnake(const std::vector<MAT_D>& w1, const std::vector<VEC_D>& b1)

@@ -7,7 +7,6 @@ namespace Render
 		  m_Window(std::make_shared<sf::RenderWindow>()),
 		  m_Clock(std::make_shared<sf::Clock>())
 	{
-		ENGINE_INIT_WARN("Wrapper Instanstiated");
 		m_Engine->CreatePopulation(GeneticSettings::POP_SIZE);
 
 		// CHANGE
@@ -17,7 +16,6 @@ namespace Render
 
 	Wrapper::~Wrapper()
 	{
-		ENGINE_INIT_WARN("Wrapper Object Destroyed");
 	}
 
 	void Wrapper::InitWindow()
@@ -68,7 +66,6 @@ namespace Render
 	//	if (TopScore > PreviousScore || LoadSnake) {
 	//		PreviousScore = TopScore;
 
-		ENGINE_LOGGER_INFO("Replaying Snake");
 		SET_SEED(m_Engine->TopSnake()->seed_value);
 		
 			while (m_Engine->TopSnake()->isAlive) {
@@ -121,7 +118,6 @@ namespace Render
 
 		if (ShowGame || LoadSnake)
 		{
-			ENGINE_LOGGER_INFO("Window Initialized");
 			Wrapper::InitWindow();
 		}
 
@@ -138,14 +134,12 @@ namespace Render
 
 			if (!LoadSnake)
 			{
-				ENGINE_LOGGER_INFO("Training Snakes with GUI");
 				m_Engine->TrainPopulation();
 				//Wrapper::ReplayBestSnake();
 
 			}
 			else
 			{
-				ENGINE_LOGGER_INFO("Loading Snake");
 			//	m_Engine->LoadSnake();
 			//	m_Engine->ReplayTopSnake();
 			}
@@ -154,7 +148,6 @@ namespace Render
 
 		while (m_Engine->CurrentGeneration() < GeneticSettings::MAX_GENERATIONS)
 		{
-			ENGINE_LOGGER_INFO("Training Snakes with Console");
 			m_Engine->TrainPopulation();
 		}
 	}
