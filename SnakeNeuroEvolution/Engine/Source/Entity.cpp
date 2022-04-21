@@ -176,7 +176,7 @@ namespace NeuroEvolution {
 
 		// TODO: Not the Most Elegent Solution... Can be Reworked
 		if (possiblitlies.size() <= 0) {
-			ENGINE_LOGGER_CRITICAL("SNAKE HAS COMPLETED OR WON, DO SOMETING ABOUT THIS");
+			ENGINE_RESULTS_LOGGER("SNAKE HAS COMPLETED OR WON, DO SOMETING ABOUT THIS");
 			std::cin.get();
 		}
 
