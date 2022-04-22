@@ -46,8 +46,8 @@ namespace NeuroEvolution {
 		this->colorlist[1] = std::rand() % 255;
 		this->colorlist[2] = std::rand() % 255;
 
-		int r = std::uniform_int_distribution<int>(0, GameSettings::BoardX)(Seed::GetInstance()->m_Generator);
-		int c = std::uniform_int_distribution<int>(0, GameSettings::BoardY)(Seed::GetInstance()->m_Generator);
+		int r = std::uniform_int_distribution<int>(0, GameSettings::BoardY)(Seed::GetInstance()->m_Generator);
+		int c = std::uniform_int_distribution<int>(0, GameSettings::BoardX)(Seed::GetInstance()->m_Generator);
 
 		Segments.push_back(std::make_pair(r, c));
 
@@ -164,16 +164,16 @@ namespace NeuroEvolution {
 		std::deque<Point> possiblitlies;
 		for (int i = 0; i < GameSettings::BoardY; i++) {
 			for (int j = 0; j < GameSettings::BoardX; j++) {
-				Point check = std::make_pair(i, j);
+				Point check = std::make_pair(j, i);
 				if (std::find(Segments.begin(), Segments.end(), check) == std::end(Segments)) {
-					possiblitlies.push_back(std::make_pair(i, j));
+					possiblitlies.push_back(std::make_pair(j, i));
 				}
 			}
 		}
 
 		// TODO: Not the Most Elegent Solution... Can be Reworked
 		if (possiblitlies.size() <= 0) {
-			ENGINE_RESULTS_LOGGER("SNAKE HAS COMPLETED OR WON, DO SOMETING ABOUT THIS");
+			ENGINE_LOGGER("SNAKE HAS COMPLETED OR WON, DO SOMETING ABOUT THIS");
 			std::cin.get();
 		}
 

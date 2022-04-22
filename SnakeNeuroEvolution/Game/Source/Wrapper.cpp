@@ -12,6 +12,7 @@ namespace Render
 		// CHANGE
 		ShowGame = true;
 		LoadSnake = false;
+		DisplayEntireGeneration = false;
 	}
 
 	Wrapper::~Wrapper()
@@ -23,11 +24,65 @@ namespace Render
 		m_Window->create(sf::VideoMode(WindowSettings::Width, WindowSettings::Height), "SnakeNeuroEvolution");
 	}
 
-	void Wrapper::CreateObjects()
+	void Wrapper::CreateObjectsForAllEntities(std::vector<std::shared_ptr<NeuroEvolution::Entity>>& State)
 	{
 
 		GameObjects.clear();
+		sf::Vector2f _CellSize(20, 20);
 
+		for (unsigned int i = 0; i < State.size(); i++)
+		{
+			int topscore = 0;
+			if (State[i]->isAlive)
+			{
+				for (unsigned int seg = 0; seg < State[i]->Segments.size(); seg++)
+				{
+					int SnakeScore = State[i]->score;
+					std::shared_ptr<sf::RectangleShape> snakeObject = std::make_shared<sf::RectangleShape>();
+					snakeObject->setSize(_CellSize);
+					snakeObject->setPosition(sf::Vector2f((State[i]->Segments[seg].first * _CellSize.x) + 10, (State[i]->Segments[seg].second * _CellSize.y) + 10));
+					if (seg == State[i]->Segments.size())
+					{
+						if (SnakeScore > topscore)
+						{
+							topscore = SnakeScore;
+							snakeObject->setFillColor(sf::Color(State[i]->colorlist[0], State[i]->colorlist[1], State[i]->colorlist[2], State[i]->brightness));
+						}
+						else
+						{
+							snakeObject->setFillColor(sf::Color(State[i]->colorlist[0], State[i]->colorlist[1], State[i]->colorlist[2], State[i]->brightness / 4));
+						}
+					}
+					else
+					{
+						if (SnakeScore > topscore)
+						{
+							topscore = SnakeScore;
+							snakeObject->setFillColor(sf::Color(State[i]->colorlist[0], State[i]->colorlist[1], State[i]->colorlist[2], State[i]->brightness));
+						}
+						else
+						{
+							snakeObject->setFillColor(sf::Color(State[i]->colorlist[0], State[i]->colorlist[1], State[i]->colorlist[2], State[i]->brightness / 4));
+						}
+					}
+
+					GameObjects.push_back(snakeObject);
+					
+				}
+
+				std::shared_ptr<sf::RectangleShape> FoodObject = std::make_shared<sf::RectangleShape>();
+				FoodObject->setSize({ _CellSize.x, _CellSize.y });
+				FoodObject->setPosition(sf::Vector2f((State[i]->TargetFood.first * _CellSize.x) + 10, ((State[i]->TargetFood.second * _CellSize.y)) + 10));
+				FoodObject->setFillColor(sf::Color(0, 255, 0, 50));
+				GameObjects.push_back(FoodObject);
+			}
+		}
+	}
+
+	void Wrapper::CreateObjectsForSingleEntity()
+	{
+
+		GameObjects.clear();
 		sf::Vector2f _CellSize(20, 20);
 		// If its Alive
 		if (m_Engine->TopSnake()->isAlive) {
@@ -36,8 +91,6 @@ namespace Render
 				std::shared_ptr<sf::RectangleShape> snakeObject = std::make_shared<sf::RectangleShape>();
 				snakeObject->setSize( _CellSize );
 				snakeObject->setPosition(sf::Vector2f((m_Engine->TopSnake()->Segments[j].first * _CellSize.x) + 10, (m_Engine->TopSnake()->Segments[j].second * _CellSize.y + 10)));
-				snakeObject->setOutlineThickness(1);
-				snakeObject->setOutlineColor(sf::Color::White);
 				if (j == m_Engine->TopSnake()->Segments.size() - 1) {
 					// Change the brightness of the Head
 					snakeObject->setFillColor(sf::Color(m_Engine->TopSnake()->colorlist[0], m_Engine->TopSnake()->colorlist[1], m_Engine->TopSnake()->colorlist[2], m_Engine->TopSnake()->brightness));
@@ -53,14 +106,30 @@ namespace Render
 			std::shared_ptr<sf::RectangleShape> FoodObject = std::make_shared<sf::RectangleShape>();
 			FoodObject->setSize({ _CellSize.x, _CellSize.y });
 			FoodObject->setPosition(sf::Vector2f((m_Engine->TopSnake()->TargetFood.first * _CellSize.x) + 10, ((m_Engine->TopSnake()->TargetFood.second * _CellSize.y)) + 10));
-			FoodObject->setOutlineThickness(1);
-			FoodObject->setOutlineColor(sf::Color::White);
 			FoodObject->setFillColor(sf::Color(0, 255, 0, 255));
 			// Add to the GameObjects
 			GameObjects.push_back(FoodObject);
 		}
 	}
 
+	void Wrapper::ReplayAllSnakes()
+	{
+		std::vector<std::shared_ptr<NeuroEvolution::Entity>> state;
+		while (!m_Engine->isEntitiesDead())
+		{
+			if (m_Clock->getElapsedTime().asMilliseconds() > GameSettings::TickSpeed)
+			{
+				m_Clock->restart();
+
+				state = m_Engine->TrainOnce();
+
+				CreateObjectsForAllEntities(state);
+				DrawObjects();
+			}
+		}
+		m_Engine->CreateNextGeneration();
+		state.clear();
+	}
 
 	void Wrapper::ReplayBestSnake() {
 	//	if (TopScore > PreviousScore || LoadSnake) {
@@ -72,7 +141,6 @@ namespace Render
 				if (m_Clock->getElapsedTime().asMilliseconds() > GameSettings::TickSpeed) {
 
 					m_Clock->restart();
-
 					m_Engine->TopSnake()->Update();
 
 				//	if (Replay_Snake->score > TopScore) {
@@ -85,7 +153,7 @@ namespace Render
 				//	}
 				//	Update();
 				//	Draw();
-					Wrapper::CreateObjects();
+					Wrapper::CreateObjectsForSingleEntity();
 					Wrapper::DrawObjects();
 				}
 			}
@@ -132,16 +200,22 @@ namespace Render
 				}
 			}
 
-			if (!LoadSnake)
+			// Display Top Snake
+			if (!DisplayEntireGeneration && !LoadSnake)
 			{
 				m_Engine->TrainPopulation();
-				//Wrapper::ReplayBestSnake();
+				Wrapper::ReplayBestSnake();
 
 			}
+			// Display All Snakes
+			else if (DisplayEntireGeneration && !LoadSnake)
+			{
+				ReplayAllSnakes();
+			}
+			// Load Snake
 			else
 			{
-			//	m_Engine->LoadSnake();
-			//	m_Engine->ReplayTopSnake();
+
 			}
 
 		}

@@ -16,4 +16,4 @@ namespace NeuroEvolution {
 	};
 }
 
-#define ENGINE_RESULTS_LOGGER(...) NeuroEvolution::Logger::GetEngineLogger()->warn(__VA_ARGS__)
+#define ENGINE_LOGGER(...) NeuroEvolution::Logger::GetEngineLogger()->warn(__VA_ARGS__)

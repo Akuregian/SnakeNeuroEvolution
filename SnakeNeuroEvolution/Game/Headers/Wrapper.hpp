@@ -12,7 +12,8 @@ namespace Render {
 
 		void InitWindow();
 		void Simulate();
-		void CreateObjects();
+		void CreateObjectsForAllEntities(std::vector<std::shared_ptr<NeuroEvolution::Entity>>& State);
+		void CreateObjectsForSingleEntity();
 		void ReplayAllSnakes();
 		void ReplayBestSnake();
 		void DrawObjects();
@@ -26,6 +27,7 @@ namespace Render {
 
 		bool ShowGame;
 		bool LoadSnake;
+		bool DisplayEntireGeneration;
 	};
 
 }

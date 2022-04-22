@@ -40,6 +40,12 @@ namespace NeuroEvolution {
 		}
 	}
 
+	std::vector<std::shared_ptr<NeuroEvolution::Entity>>& Population::TrainEntitiesOnce()
+	{
+		Update();
+		return _EntityPopulation;
+	}
+
 	void Population::TrainEntities()
 	{
 		while (!isAllSnakesDead())
@@ -103,20 +109,17 @@ namespace NeuroEvolution {
 	void Population::Results()
 	{
 		//--------------------- Print To Console ------------------------
-		ENGINE_RESULTS_LOGGER("Generation: {0}", current_generation);
-		ENGINE_RESULTS_LOGGER("--------------------------------------------------------");
+		ENGINE_LOGGER("Generation: {0}", current_generation);
+		ENGINE_LOGGER("--------------------------------------------------------");
 		for (unsigned i = 0; i < 1; i++) {
 
-			ENGINE_RESULTS_LOGGER("Score: {0}", _EntityPopulation[i]->score);
-			ENGINE_RESULTS_LOGGER("Network Fitness: {0}", _EntityPopulation[i]->_Brain->NetworkFitness);
+			ENGINE_LOGGER("Score: {0}", _EntityPopulation[i]->score);
+			ENGINE_LOGGER("Network Fitness: {0}", _EntityPopulation[i]->_Brain->NetworkFitness);
 		}
-		ENGINE_RESULTS_LOGGER("--------------------------------------------------------\n\n");
+		ENGINE_LOGGER("--------------------------------------------------------\n\n");
 
-		//--------------------------------------------------------------
-		
-		
 		// Top Snake
-		ENGINE_RESULTS_LOGGER("TopSeed: {0}", _EntityPopulation.front()->seed_value);
  		ReplaySnake = std::make_shared<Entity>(_EntityPopulation.front()->_Brain->_Weights, _EntityPopulation.front()->_Brain->_Bias, _EntityPopulation.front()->seed_value);
+
 	}
 }
