@@ -17,8 +17,14 @@ namespace NeuroEvolution {
 		if (seed != NULL)
 		{
 			seed_value = seed;
+			SET_SEED(seed_value);
 		}
-
+		else
+		{
+			NEW_SEED;
+			seed_value = Seed::GetInstance()->curr_seed;
+			SET_SEED(seed_value);
+		}
 		Entity::InitializeSnake(w1, b1);
 	};
 
@@ -28,11 +34,15 @@ namespace NeuroEvolution {
 
 	void Entity::InitializeSnake(const std::vector<MAT_D>& w1, const std::vector<VEC_D>& b1)
 	{
-
 		if (seed_value == NULL)
 		{
 			NEW_SEED;
-			seed_value = Seed::GetInstance()->GetSeed();
+			seed_value = Seed::GetInstance()->curr_seed;
+			SET_SEED(seed_value);
+		}
+		else
+		{
+			SET_SEED(seed_value);
 		}
 
 		this-> isAlive = true;
@@ -161,6 +171,7 @@ namespace NeuroEvolution {
 
 	void Entity::GenerateFood(Point& point)
 	{
+		SET_SEED(seed_value); // @@@WHY DO I HAVE TO RE_SET THE SEED?@@@
 		std::deque<Point> possiblitlies;
 		for (int i = 0; i < GameSettings::BoardY; i++) {
 			for (int j = 0; j < GameSettings::BoardX; j++) {
@@ -176,12 +187,12 @@ namespace NeuroEvolution {
 			ENGINE_LOGGER("SNAKE HAS COMPLETED OR WON, DO SOMETING ABOUT THIS");
 			std::cin.get();
 		}
-
 		int random = std::uniform_int_distribution<int>(0, possiblitlies.size() - 1)(Seed::GetInstance()->m_Generator);
 		Point randPoint = possiblitlies[random];
 		Point FoodLocation = std::make_pair(randPoint.first, randPoint.second);
 
-		//	std::cout << "FoodLocation: ( " << FoodLocation.first << ", " << FoodLocation.second << " )" << std::endl;
+		FoodCacheLocations.push_back(FoodLocation);
+
 		point = FoodLocation;
 	}
 

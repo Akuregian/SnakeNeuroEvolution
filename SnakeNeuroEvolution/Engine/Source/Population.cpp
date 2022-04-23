@@ -111,11 +111,8 @@ namespace NeuroEvolution {
 		//--------------------- Print To Console ------------------------
 		ENGINE_LOGGER("Generation: {0}", current_generation);
 		ENGINE_LOGGER("--------------------------------------------------------");
-		for (unsigned i = 0; i < 1; i++) {
-
-			ENGINE_LOGGER("Score: {0}", _EntityPopulation[i]->score);
-			ENGINE_LOGGER("Network Fitness: {0}", _EntityPopulation[i]->_Brain->NetworkFitness);
-		}
+		ENGINE_LOGGER("Score: {0}", _EntityPopulation.front()->score);
+		ENGINE_LOGGER("Network Fitness: {0}", _EntityPopulation.front()->_Brain->NetworkFitness);
 		ENGINE_LOGGER("--------------------------------------------------------\n\n");
 
 		// Top Snake

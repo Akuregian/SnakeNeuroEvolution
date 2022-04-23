@@ -16,7 +16,7 @@ namespace WindowSettings {
 namespace GameSettings {
 
 	// How Fast eac Frame Ticks
-	const unsigned int TickSpeed = 25;
+	const unsigned int TickSpeed = 100; // 25
 	const unsigned int BoardX = 10; // 40
 	const unsigned int BoardY = 10; // 20
 }

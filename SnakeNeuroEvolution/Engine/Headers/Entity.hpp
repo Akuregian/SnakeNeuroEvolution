@@ -65,6 +65,8 @@ namespace NeuroEvolution {
 		// TargetFood
 		Point TargetFood;
 
+		std::vector<Point> FoodCacheLocations;
+
 	protected:
 
 		// Snake Moves
