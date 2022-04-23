@@ -65,7 +65,8 @@ namespace NeuroEvolution {
 		// TargetFood
 		Point TargetFood;
 
-		std::vector<Point> FoodCacheLocations;
+		// Save the weights of the top Snake
+		void SaveTopSnakeWeights();
 
 	protected:
 

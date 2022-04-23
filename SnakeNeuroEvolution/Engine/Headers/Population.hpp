@@ -16,6 +16,7 @@ namespace NeuroEvolution {
 		void Update();
 		const int EntityPopulationSize() { return _EntityPopulation.size(); };
 		void Results();
+		void LoadSnake();
 
 		std::vector<std::shared_ptr<NeuroEvolution::Entity>> _EntityPopulation;
 		std::vector<std::shared_ptr<NeuroEvolution::Entity>> _EntityMatingPool;

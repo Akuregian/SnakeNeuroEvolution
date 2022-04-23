@@ -7,12 +7,13 @@ namespace Render
 		  m_Window(std::make_shared<sf::RenderWindow>()),
 		  m_Clock(std::make_shared<sf::Clock>())
 	{
-		m_Engine->CreatePopulation(GeneticSettings::POP_SIZE);
 
 		// CHANGE
-		ShowGame = true;
-		LoadSnake = false;
+		DisplayGUI = false;
+		LoadSnake = true;
 		DisplayEntireGeneration = false;
+
+		if (!LoadSnake) { m_Engine->CreatePopulation(GeneticSettings::POP_SIZE); }
 	}
 
 	Wrapper::~Wrapper()
@@ -132,41 +133,17 @@ namespace Render
 	}
 
 	void Wrapper::ReplayBestSnake() {
-	//	if (TopScore > PreviousScore || LoadSnake) {
-	//		PreviousScore = TopScore;
-
 		SET_SEED(m_Engine->TopSnake()->seed_value);
-		
-			while (m_Engine->TopSnake()->isAlive) {
-				if (m_Clock->getElapsedTime().asMilliseconds() > GameSettings::TickSpeed) {
+		while (m_Engine->TopSnake()->isAlive) {
+			if (m_Clock->getElapsedTime().asMilliseconds() > GameSettings::TickSpeed) {
 
-					m_Clock->restart();
-					m_Engine->TopSnake()->Update();
+				m_Clock->restart();
+				m_Engine->TopSnake()->Update();
 
-				//	if (Replay_Snake->score > TopScore) {
-				//		TopScore = Replay_Snake->score;
-				//	}
-
-				//	if (Replay_Snake->Segments.size() == (Settings::COLS * Settings::ROWS)) {
-				//		std::cout << "Snake Died or Completed Game" << std::endl;
-				//		std::cin.get();
-				//	}
-				//	Update();
-				//	Draw();
-					Wrapper::CreateObjectsForSingleEntity();
-					Wrapper::DrawObjects();
-				}
+				Wrapper::CreateObjectsForSingleEntity();
+				Wrapper::DrawObjects();
 			}
-
-	//	}
-//		else {
-//			m_win.clear();
-//			ShowText();
-//			m_win.draw(Training_Text);
-//			DrawNeuralNetwork();
-//			m_win.display();
-//		}
-//		delete Replay_Snake;
+		}
 	}
 
 	void Wrapper::DrawObjects()
@@ -184,7 +161,7 @@ namespace Render
 	void Wrapper::Simulate()
 	{
 
-		if (ShowGame || LoadSnake)
+		if (DisplayGUI || LoadSnake)
 		{
 			Wrapper::InitWindow();
 		}
@@ -215,9 +192,9 @@ namespace Render
 			// Load Snake
 			else
 			{
-
+				m_Engine->LoadTopEntity();
+				ReplayBestSnake();
 			}
-
 		}
 
 		while (m_Engine->CurrentGeneration() < GeneticSettings::MAX_GENERATIONS)

@@ -119,4 +119,84 @@ namespace NeuroEvolution {
  		ReplaySnake = std::make_shared<Entity>(_EntityPopulation.front()->_Brain->_Weights, _EntityPopulation.front()->_Brain->_Bias, _EntityPopulation.front()->seed_value);
 
 	}
+
+	void Population::LoadSnake()
+	{
+		// Matrix && Vector Varibales
+		std::vector<Eigen::MatrixXd> Weights;
+		std::vector<Eigen::VectorXd> Biases;
+		std::string saved_seed;
+
+		// in this object we store the data from the matrix
+		std::ifstream weightsDataFile("../../../../SnakeNeuroEvolution/TopEntityWeights/TopSnake.csv");
+
+		// File Data Variables
+		std::vector<double> dataEntries;
+		std::string dataRowString; // this variable is used to store the row of the matrix that contains commas
+		std::string dataEntry; // this variable is used to store the matrix entry;
+		int RowNumber = 0; // this variable is used to track the number of rows
+
+		// read a row by row of matrixDataFile and store every line into the string variable matrixRowString
+		while (getline(weightsDataFile, dataRowString)) {
+
+			if (dataRowString.find("Bias") != std::string::npos) {
+				break;
+			}
+			// stringstream to go through each string in the line obtained
+			std::stringstream dataRowStringStream(dataRowString);
+
+			// read pieces of the stream matrixRowStringStream until every comma, and store the resulting character into the matrixEntry. Stop when "\n" is reached
+			while (std::getline(dataRowStringStream, dataEntry, ',')) {
+				//convert the string to float and fill in the row vector, which stores all the matrix entries
+				dataEntries.push_back(std::stof(dataEntry));
+			}
+
+			// Each Matrix Is Stored with a line seperating it from the other Matrix, If we hit that line: Create a Matrix
+			if (dataRowString.empty()) {
+				Eigen::MatrixXd read_matrix = Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(dataEntries.data(), RowNumber, dataEntries.size() / RowNumber);
+				Weights.push_back(read_matrix);
+				dataEntries.clear();
+				RowNumber = 0;
+				continue;
+			}
+
+			RowNumber++; //update the column numbers
+		}
+
+		// read a row by row of matrixDataFile and store every line into the string variable matrixRowString
+		while (getline(weightsDataFile, dataRowString)) {
+
+			if (dataRowString.find("Seed") != std::string::npos) {
+				break;
+			}
+
+			// stringstream to go through each string in the line obtained
+			std::stringstream dataRowStringStream(dataRowString);
+
+			// read pieces of the stream matrixRowStringStream until every comma, and store the resulting character into the matrixEntry. Stop when "\n" is reached
+			while (std::getline(dataRowStringStream, dataEntry, ',')) {
+				//convert the string to float and fill in the row vector, which stores all the matrix entries
+				dataEntries.push_back(std::stof(dataEntry));
+			}
+
+			// Each Matrix Is Stored with a line seperating it from the other Matrix, If we hit that line: Create a Matrix
+			if (dataRowString.empty()) {
+				Eigen::VectorXd read_matrix = Eigen::Map<Eigen::VectorXd>(dataEntries.data(), dataEntries.size());
+				Biases.push_back(read_matrix);
+				dataEntries.clear();
+				RowNumber = 0;
+				continue;
+			}
+			RowNumber++; //update the column numbers
+		}
+
+		getline(weightsDataFile, dataRowString);
+		saved_seed = dataRowString;
+
+		std::cout << saved_seed << std::endl;
+		uint32_t seedv = std::stoull(saved_seed);
+
+		// Snake Variables
+		ReplaySnake = std::make_shared<NeuroEvolution::Entity>(Weights, Biases, seedv);
+	}
 }

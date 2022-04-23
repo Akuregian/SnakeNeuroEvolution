@@ -41,11 +41,10 @@ namespace NeuroEvolution {
 		// Returns the Current Generation
 		unsigned int& CurrentGeneration() { return m_Population->current_generation; };
 
-		// Save the weights of the top Snake
-		void SaveTopSnakeWeights();
-
 		// Returns an address to the Top Performing Entity
 		std::shared_ptr<NeuroEvolution::Entity>& TopSnake() { return m_Population->ReplaySnake; };
+
+		void LoadTopEntity() { m_Population->LoadSnake(); };
 
 		// Check if All Snakes in the population are Dead
 		bool isEntitiesDead() { return m_Population->isAllSnakesDead(); };

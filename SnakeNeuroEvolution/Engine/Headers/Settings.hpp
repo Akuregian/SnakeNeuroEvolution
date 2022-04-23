@@ -16,7 +16,7 @@ namespace WindowSettings {
 namespace GameSettings {
 
 	// How Fast eac Frame Ticks
-	const unsigned int TickSpeed = 100; // 25
+	const unsigned int TickSpeed = 25; // 25
 	const unsigned int BoardX = 10; // 40
 	const unsigned int BoardY = 10; // 20
 }
@@ -24,8 +24,8 @@ namespace GameSettings {
 namespace GeneticSettings {
 
 	// Genetic Algorithm 
-	const int POP_SIZE = 250; // 250
-	const int MATING_POP_SIZE = 500; // 500
+	const int POP_SIZE = 300; // 250
+	const int MATING_POP_SIZE = 600; // 500
 
 	// Mutation Rate
 	const double MUTATION_RATE = 0.05;

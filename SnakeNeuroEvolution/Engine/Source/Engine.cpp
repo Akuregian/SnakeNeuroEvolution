@@ -28,5 +28,6 @@ namespace NeuroEvolution {
 	{
 		m_Population->TrainEntities();
 	}
+
 }
 

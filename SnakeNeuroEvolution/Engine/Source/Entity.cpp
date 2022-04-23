@@ -184,15 +184,13 @@ namespace NeuroEvolution {
 
 		// TODO: Not the Most Elegent Solution... Can be Reworked
 		if (possiblitlies.size() <= 0) {
-			ENGINE_LOGGER("SNAKE HAS COMPLETED OR WON, DO SOMETING ABOUT THIS");
+			ENGINE_LOGGER("SNAKE HAS COMPLETED OR WON");
+			SaveTopSnakeWeights();
 			std::cin.get();
 		}
 		int random = std::uniform_int_distribution<int>(0, possiblitlies.size() - 1)(Seed::GetInstance()->m_Generator);
 		Point randPoint = possiblitlies[random];
 		Point FoodLocation = std::make_pair(randPoint.first, randPoint.second);
-
-		FoodCacheLocations.push_back(FoodLocation);
-
 		point = FoodLocation;
 	}
 
@@ -320,4 +318,24 @@ namespace NeuroEvolution {
 		}
 		return false;
 	}
+
+	void Entity::SaveTopSnakeWeights()
+	{
+		const static Eigen::IOFormat CSVFormat(Eigen::FullPrecision, Eigen::DontAlignCols, ", ", "\n");
+		std::ofstream file("../../../../SnakeNeuroEvolution/TopEntityWeights/TopSnake.csv", std::ofstream::out | std::ofstream::trunc);
+
+		if (file.is_open()) {
+			for (int i = 0; i < _Brain->_Weights.size(); i++) {
+				file << _Brain->_Weights[i].format(CSVFormat) << "\n\n";
+			}
+			file << "Bias\n";
+			for (int i = 0; i < _Brain->_Bias.size(); i++) {
+				file << _Brain->_Bias[i] << "\n\n";
+			}
+			file << "Seed\n";
+			file << seed_value;
+		}
+		file.close();
+	}
+
 };

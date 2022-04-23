@@ -69,6 +69,7 @@ namespace NeuroEvolution {
 		}
 	}
 
+
 	void NeuralNetwork::PrintNetworkToConsole() {
 		// ----------------Debugging-------------------
 
