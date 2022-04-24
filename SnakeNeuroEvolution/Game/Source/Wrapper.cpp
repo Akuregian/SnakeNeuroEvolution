@@ -69,7 +69,7 @@ namespace Render
 
 		// @@ Temporary @@
 		const unsigned int windowOffsetX = 600;
-		const unsigned int windowOffsetY = 50;
+		const unsigned int windowOffsetY = 25;
 
 		// If its Alive
 		if (Curr_Entity->isAlive) {
@@ -81,6 +81,10 @@ namespace Render
 				if (j == Curr_Entity->Segments.size() - 1) {
 					// Change the brightness of the Head
 					EntityObject->setFillColor(sf::Color(Curr_Entity->colorlist[0], Curr_Entity->colorlist[1], Curr_Entity->colorlist[2], Curr_Entity->brightness));
+				}
+				else if (j == 0 || j == 1 || j == 2 && Curr_Entity->Segments.size() > 4)
+				{
+					EntityObject->setFillColor(sf::Color(Curr_Entity->colorlist[0], Curr_Entity->colorlist[1], Curr_Entity->colorlist[2], (Curr_Entity->brightness / 3)));
 				}
 				else {
 					EntityObject->setFillColor(sf::Color(Curr_Entity->colorlist[0], Curr_Entity->colorlist[1], Curr_Entity->colorlist[2], (Curr_Entity->brightness / 2)));
@@ -241,25 +245,20 @@ namespace Render
 	{
 		m_Window->clear();
 
-		for (auto& i : GameObjects)
-		{
-			m_Window->draw(*i);
-		}
+		for (auto& i : GameObjects) { m_Window->draw(*i); }
 
 		// Draw Neural Network, Only if were are loading a snake
 
-		for (unsigned int i = 0; i < NeuronObjects.size(); i++)
-		{
+		for (unsigned int i = 0; i < NeuronObjects.size(); i++) {
 			for (unsigned int j = 0; j < NeuronObjects[i].size(); j++)
 			{
 				m_Window->draw(*NeuronObjects[i][j]);
 			}
 		}
 
-
 		// Draw Weights
-		for (int i = 0; i < WeightLines.size(); i++) {
-			for (int j = 0; j < WeightLines[i].size(); j++) {
+		for (unsigned int i = 0; i < WeightLines.size(); i++) {
+			for (unsigned int j = 0; j < WeightLines[i].size(); j++) {
 				if (i == WeightLines.size() - 1 || j == WeightLines[i].size() - 1) {
 					continue;
 				}
