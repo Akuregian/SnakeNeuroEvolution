@@ -66,7 +66,8 @@ namespace NeuroEvolution {
 		Point TargetFood;
 
 		// Save the weights of the top Snake
-		void SaveTopSnakeWeights();
+		void SaveWeights();
+		bool isReplayEntity;
 
 	protected:
 

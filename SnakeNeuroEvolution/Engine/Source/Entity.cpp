@@ -55,6 +55,7 @@ namespace NeuroEvolution {
 		this->colorlist[0] = std::rand() % 255;
 		this->colorlist[1] = std::rand() % 255;
 		this->colorlist[2] = std::rand() % 255;
+		this->isReplayEntity = false;
 
 		int r = std::uniform_int_distribution<int>(0, GameSettings::BoardY)(Seed::GetInstance()->m_Generator);
 		int c = std::uniform_int_distribution<int>(0, GameSettings::BoardX)(Seed::GetInstance()->m_Generator);
@@ -184,8 +185,14 @@ namespace NeuroEvolution {
 
 		// TODO: Not the Most Elegent Solution... Can be Reworked
 		if (possiblitlies.size() <= 0) {
-			ENGINE_LOGGER("SNAKE HAS COMPLETED OR WON");
-			SaveTopSnakeWeights();
+			if (!isReplayEntity)
+			{
+				ENGINE_LOGGER("Saved Weights");
+				SaveWeights();
+				std::cin.get();
+			}
+			
+			ENGINE_LOGGER("Didn't Save Weights");
 			std::cin.get();
 		}
 		int random = std::uniform_int_distribution<int>(0, possiblitlies.size() - 1)(Seed::GetInstance()->m_Generator);
@@ -319,7 +326,7 @@ namespace NeuroEvolution {
 		return false;
 	}
 
-	void Entity::SaveTopSnakeWeights()
+	void Entity::SaveWeights()
 	{
 		const static Eigen::IOFormat CSVFormat(Eigen::FullPrecision, Eigen::DontAlignCols, ", ", "\n");
 		std::ofstream file("../../../../SnakeNeuroEvolution/TopEntityWeights/TopSnake.csv", std::ofstream::out | std::ofstream::trunc);

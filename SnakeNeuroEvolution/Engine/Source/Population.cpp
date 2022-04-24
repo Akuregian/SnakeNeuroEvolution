@@ -20,7 +20,7 @@ namespace NeuroEvolution {
 		}
 	}
 
-	bool Population::isAllSnakesDead()
+	bool Population::isAllEntitiesDead()
 	{
 		for (unsigned int i = 0; i < _EntityPopulation.size(); i++)
 		{
@@ -48,7 +48,7 @@ namespace NeuroEvolution {
 
 	void Population::TrainEntities()
 	{
-		while (!isAllSnakesDead())
+		while (!isAllEntitiesDead())
 		{
 			Update();
 		}
@@ -116,11 +116,11 @@ namespace NeuroEvolution {
 		ENGINE_LOGGER("--------------------------------------------------------\n\n");
 
 		// Top Snake
- 		ReplaySnake = std::make_shared<Entity>(_EntityPopulation.front()->_Brain->_Weights, _EntityPopulation.front()->_Brain->_Bias, _EntityPopulation.front()->seed_value);
+ 		ReplayEntity = std::make_shared<Entity>(_EntityPopulation.front()->_Brain->_Weights, _EntityPopulation.front()->_Brain->_Bias, _EntityPopulation.front()->seed_value);
 
 	}
 
-	void Population::LoadSnake()
+	void Population::LoadEntity()
 	{
 		// Matrix && Vector Varibales
 		std::vector<Eigen::MatrixXd> Weights;
@@ -193,10 +193,10 @@ namespace NeuroEvolution {
 		getline(weightsDataFile, dataRowString);
 		saved_seed = dataRowString;
 
-		std::cout << saved_seed << std::endl;
 		uint32_t seedv = std::stoull(saved_seed);
 
 		// Snake Variables
-		ReplaySnake = std::make_shared<NeuroEvolution::Entity>(Weights, Biases, seedv);
+		ReplayEntity = std::make_shared<NeuroEvolution::Entity>(Weights, Biases, seedv);
+		ReplayEntity->isReplayEntity = true;
 	}
 }

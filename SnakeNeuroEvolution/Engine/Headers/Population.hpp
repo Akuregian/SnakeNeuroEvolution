@@ -11,18 +11,16 @@ namespace NeuroEvolution {
 		std::vector<std::shared_ptr<NeuroEvolution::Entity>>& TrainEntitiesOnce();
 		void TrainEntities();
 		void CreateNextGeneration();
-
-		bool isAllSnakesDead();
+		bool isAllEntitiesDead();
 		void Update();
-		const int EntityPopulationSize() { return _EntityPopulation.size(); };
 		void Results();
-		void LoadSnake();
+		void LoadEntity();
 
 		std::vector<std::shared_ptr<NeuroEvolution::Entity>> _EntityPopulation;
 		std::vector<std::shared_ptr<NeuroEvolution::Entity>> _EntityMatingPool;
 		
 		// TopSnake in Population
-		std::shared_ptr<NeuroEvolution::Entity> ReplaySnake;
+		std::shared_ptr<NeuroEvolution::Entity> ReplayEntity;
 
 		unsigned int current_generation;
 

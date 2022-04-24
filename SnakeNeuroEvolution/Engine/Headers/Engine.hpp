@@ -42,12 +42,12 @@ namespace NeuroEvolution {
 		unsigned int& CurrentGeneration() { return m_Population->current_generation; };
 
 		// Returns an address to the Top Performing Entity
-		std::shared_ptr<NeuroEvolution::Entity>& TopSnake() { return m_Population->ReplaySnake; };
+		std::shared_ptr<NeuroEvolution::Entity>& TopEntity() { return m_Population->ReplayEntity; };
 
-		void LoadTopEntity() { m_Population->LoadSnake(); };
+		void LoadTopEntity() { m_Population->LoadEntity(); };
 
 		// Check if All Snakes in the population are Dead
-		bool isEntitiesDead() { return m_Population->isAllSnakesDead(); };
+		bool isEntitiesDead() { return m_Population->isAllEntitiesDead(); };
 
 	private:
 		std::shared_ptr<Population> m_Population;
