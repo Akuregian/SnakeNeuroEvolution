@@ -4,17 +4,11 @@ namespace Render
 {
 	Wrapper::Wrapper()
 		: m_Engine(std::make_shared<NeuroEvolution::Engine>()),
-			m_Window(std::make_shared<sf::RenderWindow>()),
-			m_Clock(std::make_shared<sf::Clock>()),
-			_CellSize({ 30, 30 })
+		  m_Window(std::make_shared<sf::RenderWindow>()),
+		  m_Clock(std::make_shared<sf::Clock>()),
+		  _CellSize({ 30, 30 })
 	{
-
-		// CHANGE
-		DisplayGUI = true;
-		LoadSnake = true;
-		DisplayEntireGeneration = false;
-
-		if (!LoadSnake) { m_Engine->CreatePopulation(GeneticSettings::POP_SIZE); }
+		if (!GameSettings::LoadSnake) { m_Engine->CreatePopulation(); }
 	}
 
 	Wrapper::~Wrapper()
@@ -105,55 +99,57 @@ namespace Render
 
 	void Wrapper::CreateObjectsForNeuralNetwork()
 	{
-		ENGINE_LOGGER("Creating Neural Network Objects");
-		// VerticalOffset, HorizontalOffset, XOffset, Spread
-		std::vector<unsigned int> Parameters({ 200, 145, 50, 24 });
-		std::shared_ptr<NeuroEvolution::Entity>& CurrEntity = m_Engine->TopEntity();
-		sf::Vector2f NeuronSize{ 8, 8 };
+		if (NeuronObjects.size() == 0 && WeightLines.size() == 0)
+		{
+			ENGINE_LOGGER("Creating Neural Network Objects");
+			// VerticalOffset, HorizontalOffset, XOffset, Spread
+			std::vector<unsigned int> Parameters({ 200, 145, 50, 24 });
+			sf::Vector2f NeuronSize{ 8, 8 };
 
-		for (size_t j = 0; j < CurrEntity->_Brain->_Neurons.size(); j++) {
+			for (size_t j = 0; j < NeuralSettings::TOPOLOGY.size(); j++) {
 
-			// For Every Neuron in each layer
-			std::vector<std::shared_ptr<sf::CircleShape>> NeuronsLayer;
+				// For Every Neuron in each layer
+				std::vector<std::shared_ptr<sf::CircleShape>> NeuronsLayer;
 
-			for (uint32_t k = 0; k < CurrEntity->_Brain->_Neurons[j].size(); k++) {
-				// Create a Nueron Object
-				std::shared_ptr<sf::CircleShape> Neuron = std::make_shared<sf::CircleShape>();
-				Neuron->setRadius(8);
-				Neuron->setFillColor(sf::Color::White);
-				if (j == 0) {
-					Neuron->setPosition({ NeuronSize.x + (j * Parameters[1]) + Parameters[2], NeuronSize.y + (k * Parameters[3] + (j * Parameters[0]))});
-				}
-				else if (j == 1) {
-					Neuron->setPosition({ NeuronSize.x + (j * Parameters[1]) + Parameters[2], NeuronSize.y + (k * Parameters[3] + (j * 150)) });
-				}
-				else if (j == 2) {
-					Neuron->setPosition({ NeuronSize.x + (j * Parameters[1]) + Parameters[2], NeuronSize.y + (k * Parameters[3] + (j * 125)) });
-				}
-				else {
-					Neuron->setPosition({ NeuronSize.x + (j * Parameters[1]) + Parameters[2], NeuronSize.y + (k * Parameters[3] + (j * 115)) });
-				}
+				for (uint32_t k = 0; k <NeuralSettings::TOPOLOGY[j]; k++) {
+					// Create a Nueron Object
+					std::shared_ptr<sf::CircleShape> Neuron = std::make_shared<sf::CircleShape>();
+					Neuron->setRadius(8);
+					Neuron->setFillColor(sf::Color::White);
+					if (j == 0) {
+						Neuron->setPosition({ NeuronSize.x + (j * Parameters[1]) + Parameters[2], NeuronSize.y + (k * Parameters[3] + (j * Parameters[0])) });
+					}
+					else if (j == 1) {
+						Neuron->setPosition({ NeuronSize.x + (j * Parameters[1]) + Parameters[2], NeuronSize.y + (k * Parameters[3] + (j * 150)) });
+					}
+					else if (j == 2) {
+						Neuron->setPosition({ NeuronSize.x + (j * Parameters[1]) + Parameters[2], NeuronSize.y + (k * Parameters[3] + (j * 125)) });
+					}
+					else {
+						Neuron->setPosition({ NeuronSize.x + (j * Parameters[1]) + Parameters[2], NeuronSize.y + (k * Parameters[3] + (j * 115)) });
+					}
 
-				NeuronsLayer.push_back(Neuron);
+					NeuronsLayer.push_back(Neuron);
+				}
+				NeuronObjects.push_back(NeuronsLayer);
 			}
-			NeuronObjects.push_back(NeuronsLayer);
-		}
 
-		unsigned int xOffset = 15;
-		unsigned int yOffset = 10;
-		for (size_t i = 0; i < NeuronObjects.size(); i++) {
-			// For Each Neuron
-			std::vector<sf::Vertex> WeightsLayer;
-			for (size_t j = 0; j < NeuronObjects[i].size(); j++) {
-				if (i != NeuronObjects.size() - 1) {
-					const unsigned int& nextLayerSize = NeuronObjects[i + 1].size();
-					for (unsigned int line = 0; line < nextLayerSize; line++) {
-						WeightsLayer.emplace_back(sf::Vector2f(NeuronObjects[i][j]->getPosition().x + xOffset, NeuronObjects[i][j]->getPosition().y + yOffset), sf::Color::Red);
-						WeightsLayer.emplace_back(sf::Vector2f(NeuronObjects[i + 1][line]->getPosition().x + (xOffset - 13), NeuronObjects[i + 1][line]->getPosition().y + yOffset), sf::Color::Red);
+			unsigned int xOffset = 15;
+			unsigned int yOffset = 10;
+			for (size_t i = 0; i < NeuronObjects.size(); i++) {
+				// For Each Neuron
+				std::vector<sf::Vertex> WeightsLayer;
+				for (size_t j = 0; j < NeuronObjects[i].size(); j++) {
+					if (i != NeuronObjects.size() - 1) {
+						const unsigned int& nextLayerSize = NeuronObjects[i + 1].size();
+						for (unsigned int line = 0; line < nextLayerSize; line++) {
+							WeightsLayer.emplace_back(sf::Vector2f(NeuronObjects[i][j]->getPosition().x + xOffset, NeuronObjects[i][j]->getPosition().y + yOffset), sf::Color::Red);
+							WeightsLayer.emplace_back(sf::Vector2f(NeuronObjects[i + 1][line]->getPosition().x + (xOffset - 13), NeuronObjects[i + 1][line]->getPosition().y + yOffset), sf::Color::Red);
+						}
 					}
 				}
+				WeightLines.push_back(WeightsLayer);
 			}
-			WeightLines.push_back(WeightsLayer);
 		}
 	}
 
@@ -176,22 +172,22 @@ namespace Render
 		state.clear();
 	}
 
-	void Wrapper::ReplayBestEntity() {
-		SET_SEED(m_Engine->TopEntity()->seed_value);
-
-		Wrapper::CreateObjectsForNeuralNetwork();
-
-		while (m_Engine->TopEntity()->isAlive) {
-			if (m_Clock->getElapsedTime().asMilliseconds() > GameSettings::TickSpeed) {
-
+	void Wrapper::ReplayBestEntity()
+	{
+		std::shared_ptr<NeuroEvolution::Entity> Entity = m_Engine->TopEntity();
+		SET_SEED(Entity->seed_value);
+		while (Entity->isAlive) {
+			if (m_Clock->getElapsedTime().asMilliseconds() > GameSettings::TickSpeed)
+			{
 				m_Clock->restart();
-				m_Engine->TopEntity()->Update();
-
+				Entity->Update();
 				Wrapper::CreateObjectsForSingleEntity();
 				Wrapper::UpdateNetwork();
 				Wrapper::DrawObjects();
 			}
 		}
+
+		m_Engine->TopEntity().reset();
 	}
 
 	void Wrapper::UpdateNetwork()
@@ -272,9 +268,10 @@ namespace Render
 	void Wrapper::Simulate()
 	{
 
-		if (DisplayGUI || LoadSnake)
+		if (GameSettings::DisplayGUI || GameSettings::LoadSnake)
 		{
 			Wrapper::InitWindow();
+			Wrapper::CreateObjectsForNeuralNetwork();
 		}
 
 		while (m_Window->isOpen()) 
@@ -289,19 +286,18 @@ namespace Render
 			}
 
 			// Display Top Snake
-			if (!DisplayEntireGeneration && !LoadSnake)
+			if (GameSettings::DisplayGUI && !GameSettings::LoadSnake)
 			{
 				m_Engine->TrainPopulation();
 				Wrapper::ReplayBestEntity();
-
 			}
 			// Display All Snakes
-			else if (DisplayEntireGeneration && !LoadSnake)
+			else if (GameSettings::DisplayGUI && GameSettings::ShowEntirePopulation && !GameSettings::LoadSnake)
 			{
 				ReplayAllEntities();
 			}
 			// Load Snake
-			else
+			else if(GameSettings::LoadSnake && GameSettings::DisplayGUI && !GameSettings::ShowEntirePopulation)
 			{
 				m_Engine->LoadTopEntity();
 				ReplayBestEntity();
@@ -311,6 +307,7 @@ namespace Render
 		while (m_Engine->CurrentGeneration() < GeneticSettings::MAX_GENERATIONS)
 		{
 			m_Engine->TrainPopulation();
+
 		}
 	}
 }

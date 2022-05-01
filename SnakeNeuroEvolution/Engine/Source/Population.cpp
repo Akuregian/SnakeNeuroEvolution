@@ -4,17 +4,13 @@
 namespace NeuroEvolution {
 
 	Population::Population()
-		: current_generation(0)
-	{
-	}
+		: current_generation(0) {}
 
-	Population::~Population()
-	{
-	}
+	Population::~Population() {}
 
-	void Population::CreatePopulationOfEntites(const int& pop_size)
+	void Population::CreatePopulationOfEntites()
 	{
-		for (unsigned int i = 0; i < pop_size; i++)
+		for (unsigned int i = 0; i < GeneticSettings::POP_SIZE; i++)
 		{
 			_EntityPopulation.push_back(std::make_shared<NeuroEvolution::Entity>(NeuralSettings::TOPOLOGY));
 		}
@@ -52,6 +48,8 @@ namespace NeuroEvolution {
 		{
 			Update();
 		}
+
+		ENGINE_LOGGER("DoneTraining");
 
 		Population::CreateNextGeneration();
 	}

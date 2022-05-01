@@ -13,9 +13,9 @@ namespace NeuroEvolution {
 	{
 	}
 
-	void Engine::CreatePopulation(const int& pop_size)
+	void Engine::CreatePopulation()
 	{
-		m_Population->CreatePopulationOfEntites(pop_size);
+		m_Population->CreatePopulationOfEntites();
 	}
 
 	std::vector<std::shared_ptr<NeuroEvolution::Entity>>& Engine::TrainOnce()

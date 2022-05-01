@@ -27,7 +27,7 @@ namespace NeuroEvolution {
 		~Engine();
 
 		// Create the Population Entities
-		void CreatePopulation(const int& pop_size);
+		void CreatePopulation();
 
 		// Trains Entire Generation until all Entitis Die
 		void TrainPopulation();
@@ -39,7 +39,7 @@ namespace NeuroEvolution {
 		std::vector<std::shared_ptr<NeuroEvolution::Entity>>& TrainOnce();
 		
 		// Returns the Current Generation
-		unsigned int& CurrentGeneration() { return m_Population->current_generation; };
+		unsigned int CurrentGeneration() { return m_Population->current_generation; };
 
 		// Returns an address to the Top Performing Entity
 		std::shared_ptr<NeuroEvolution::Entity>& TopEntity() { return m_Population->ReplayEntity; };
@@ -48,6 +48,7 @@ namespace NeuroEvolution {
 
 		// Check if All Snakes in the population are Dead
 		bool isEntitiesDead() { return m_Population->isAllEntitiesDead(); };
+
 
 	private:
 		std::shared_ptr<Population> m_Population;

@@ -7,7 +7,7 @@ namespace NeuroEvolution {
 	public:
 		Population();
 		~Population();
-		void CreatePopulationOfEntites(const int& pop_size);
+		void CreatePopulationOfEntites();
 		std::vector<std::shared_ptr<NeuroEvolution::Entity>>& TrainEntitiesOnce();
 		void TrainEntities();
 		void CreateNextGeneration();
@@ -21,8 +21,8 @@ namespace NeuroEvolution {
 		
 		// TopSnake in Population
 		std::shared_ptr<NeuroEvolution::Entity> ReplayEntity;
-
 		unsigned int current_generation;
+
 
 	};
 }

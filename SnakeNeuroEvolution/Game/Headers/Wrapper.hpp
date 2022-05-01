@@ -37,10 +37,5 @@ namespace Render {
 		TWO_DIM_C NeuronObjects;
 		TWO_DIM_V WeightLines;
 		sf::Vector2f _CellSize;
-
-		bool DisplayGUI;
-		bool LoadSnake;
-		bool DisplayEntireGeneration;
 	};
-
 }
