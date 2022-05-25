@@ -134,9 +134,12 @@ namespace NeuroEvolution {
 		std::vector<Eigen::MatrixXd> Weights;
 		std::vector<Eigen::VectorXd> Biases;
 		std::string saved_seed;
+		std::vector<unsigned int> color_list_1;
+		std::vector<unsigned int> color_list_2;
 
 		// in this object we store the data from the matrix
-		std::ifstream weightsDataFile("../../../../SnakeNeuroEvolution/TopEntityWeights/TopSnake.csv");
+		std::string grid_size = "(" + std::to_string(GameSettings::BoardX) + "x" + std::to_string(GameSettings::BoardY) + ")";
+		std::ifstream weightsDataFile("../../../../SnakeNeuroEvolution/TopEntityWeights/TopSnake" + grid_size + ".csv");
 
 		// File Data Variables
 		std::vector<double> dataEntries;
@@ -198,13 +201,36 @@ namespace NeuroEvolution {
 			RowNumber++; //update the column numbers
 		}
 
+		// Saved Seed Value
 		getline(weightsDataFile, dataRowString);
 		saved_seed = dataRowString;
-
 		uint32_t seedv = std::stoull(saved_seed);
+
+		// ColorList_1
+		getline(weightsDataFile, dataRowString);
+		getline(weightsDataFile, dataRowString);
+		for (int i = 0; i < 3; i++)
+		{
+			getline(weightsDataFile, dataRowString);
+			color_list_1.push_back(std::stoi(dataRowString));
+		}
+
+		// ColorList_2
+		getline(weightsDataFile, dataRowString);
+		getline(weightsDataFile, dataRowString);
+		for (int i = 0; i < 3; i++)
+		{
+			getline(weightsDataFile, dataRowString);
+			color_list_2.push_back(std::stoi(dataRowString));
+		}
 
 		// Snake Variables
 		ReplayEntity = std::make_shared<NeuroEvolution::Entity>(Weights, Biases, seedv);
 		ReplayEntity->isReplayEntity = true;
+		for (unsigned int i = 0; i < color_list_1.size(); i++)
+		{
+			ReplayEntity->colorlist_1[i] = color_list_1[i];
+			ReplayEntity->colorlist_2[i] = color_list_2[i];
+		}
 	}
 }

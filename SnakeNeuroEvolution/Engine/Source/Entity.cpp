@@ -46,6 +46,12 @@ namespace NeuroEvolution {
 			SET_SEED(seed_value);
 		}
 
+		InitializeValues();
+		GenerateFood(TargetFood);
+	}
+
+	void Entity::InitializeValues()
+	{
 		this-> isAlive = true;
 		this->lifeSpan = 100; 
 		this->score = 0; 
@@ -53,17 +59,17 @@ namespace NeuroEvolution {
 		this->steps_since_last_apple = 0; 
 		this->curr_dir = 4;
 		this->brightness = 255;
-		this->colorlist[0] = std::rand() % 255;
-		this->colorlist[1] = std::rand() % 255;
-		this->colorlist[2] = std::rand() % 255;
-		this->isReplayEntity = false;
 
+		for(unsigned int i = 0; i < 3; i++)
+		{
+			this->colorlist_1[i] = std::rand() % 255;
+			this->colorlist_2[i] = std::rand() % 255;
+		}
+
+		this->isReplayEntity = false;
 		int r = std::uniform_int_distribution<int>(0, GameSettings::BoardY)(Seed::GetInstance()->m_Generator);
 		int c = std::uniform_int_distribution<int>(0, GameSettings::BoardX)(Seed::GetInstance()->m_Generator);
-
 		Segments.push_back(std::make_pair(r, c));
-
-		GenerateFood(TargetFood);
 	}
 
 	const VEC_D Entity::LookIn8Directions()
@@ -186,12 +192,12 @@ namespace NeuroEvolution {
 
 		// TODO: Not the Most Elegent Solution... Can be Reworked
 		if (possiblitlies.size() <= 0) {
-			if (!isReplayEntity)
-			{
+		//	if (!isReplayEntity)
+		//	{
 				ENGINE_LOGGER("Saved Weights");
 				SaveWeights();
 				std::cin.get();
-			}
+		//	}
 			
 			ENGINE_LOGGER("Didn't Save Weights");
 			std::cin.get();
@@ -330,7 +336,9 @@ namespace NeuroEvolution {
 	void Entity::SaveWeights()
 	{
 		const static Eigen::IOFormat CSVFormat(Eigen::FullPrecision, Eigen::DontAlignCols, ", ", "\n");
-		std::ofstream file("../../../../SnakeNeuroEvolution/TopEntityWeights/TopSnake.csv", std::ofstream::out | std::ofstream::trunc);
+
+		std::string grid_size = '(' + std::to_string(GameSettings::BoardX) + 'x' + std::to_string(GameSettings::BoardY) + ')';
+		std::ofstream file("../../../../SnakeNeuroEvolution/TopEntityWeights/TopSnake" + grid_size + ".csv", std::ofstream::out | std::ofstream::trunc);
 
 		// Is the File Open?
 		if (file.is_open()) {
@@ -349,18 +357,22 @@ namespace NeuroEvolution {
 			// Add "Seed" So we can find this section in the file
 			file << "Seed\n";
 			// Seed Value
-			file << seed_value;
+			file << seed_value << "\n\n";
 
-			// Save Color
-			file << "Color\n";
+			// Save Color_1
+			file << "Color1\n";
 			for (unsigned int i = 0; i < 3; i++)
 			{
-				file << colorlist[i];
+				file << colorlist_1[i] << "\n";
 			}
 
-
+			// Save Color_2
+			file << "\nColor2\n";
+			for (unsigned int i = 0; i < 3; i++)
+			{
+				file << colorlist_2[i] << "\n";
+			}
 		}
 		file.close();
 	}
-
 };

@@ -39,11 +39,11 @@ namespace Render
 					snakeObject->setPosition(sf::Vector2f((State[i]->Segments[seg].first * _CellSize.x) + 10, (State[i]->Segments[seg].second * _CellSize.y) + 10));
 					if (seg == State[i]->Segments.size() - 1)
 					{
-						snakeObject->setFillColor(sf::Color(State[i]->colorlist[0], State[i]->colorlist[1], State[i]->colorlist[2], State[i]->brightness));
+						snakeObject->setFillColor(sf::Color(State[i]->colorlist_1[0], State[i]->colorlist_1[1], State[i]->colorlist_1[2], State[i]->brightness));
 					}
 					else
 					{
-						snakeObject->setFillColor(sf::Color(State[i]->colorlist[0], State[i]->colorlist[1], State[i]->colorlist[2], State[i]->brightness / 4));
+						snakeObject->setFillColor(sf::Color(State[i]->colorlist_1[0], State[i]->colorlist_1[1], State[i]->colorlist_1[2], State[i]->brightness / 4));
 					}
 					GameObjects.push_back(snakeObject);
 				}
@@ -63,33 +63,45 @@ namespace Render
 		std::shared_ptr<NeuroEvolution::Entity>& Curr_Entity = m_Engine->TopEntity();
 
 		// @@ Temporary @@
-		const unsigned int windowOffsetX = 600;
+		const unsigned int windowOffsetX = 775;
 		const unsigned int windowOffsetY = 25;
 		const float rate = 0.02f;
 
 		// If its Alive
 		if (Curr_Entity->isAlive) {
+			float offset_r = (Curr_Entity->colorlist_2[0] - Curr_Entity->colorlist_1[0]);
+			float split_r = offset_r / Curr_Entity->Segments.size();
+			float temp_r = Curr_Entity->colorlist_1[0];
+
+			float offset_g = (Curr_Entity->colorlist_2[1] - Curr_Entity->colorlist_1[1]);
+			float split_g = offset_g / Curr_Entity->Segments.size();
+			float temp_g = Curr_Entity->colorlist_1[1];
+			
+			float offset_b = (Curr_Entity->colorlist_2[2] - Curr_Entity->colorlist_1[2]);
+			float split_b = offset_b / Curr_Entity->Segments.size();
+			float temp_b = Curr_Entity->colorlist_1[2];
+
 			for (int j = 0; j < Curr_Entity->Segments.size(); j++) {
 				// =============== Create the Snake Objects ================
 				std::shared_ptr<sf::RectangleShape> EntityObject = std::make_shared<sf::RectangleShape>();
 				EntityObject->setSize( _CellSize );
 				EntityObject->setPosition(sf::Vector2f((Curr_Entity->Segments[j].first * _CellSize.x) + windowOffsetX - 10, (Curr_Entity->Segments[j].second * _CellSize.y) + windowOffsetY - 10));
 
+				// Interpolate between colorlist_1 -> colorlist_2
+				temp_r = (Curr_Entity->colorlist_2[0] - temp_r) * rate + temp_r;
+				temp_g = (Curr_Entity->colorlist_2[1] - temp_g) * rate + temp_g;
+				temp_b = (Curr_Entity->colorlist_2[2] - temp_b) * rate + temp_b;
+
 				// Change the brightness of the Head
-				if (j == Curr_Entity->Segments.size() - 1) {
-					EntityObject->setFillColor(sf::Color(Curr_Entity->colorlist[0], Curr_Entity->colorlist[1], Curr_Entity->colorlist[2], Curr_Entity->brightness));
+				if (j == Curr_Entity->Segments.size() - 1) 
+				{
+					EntityObject->setFillColor(sf::Color(temp_r, temp_g, temp_b, Curr_Entity->brightness));
+				}
+				else 
+				{
+					EntityObject->setFillColor(sf::Color(temp_r, temp_g, temp_b, (Curr_Entity->brightness / 2)));
 				}
 				
-				// CurrentColor = (TargetColor - CurrentColor) * rate + CurrentColor;
-
-
-			//	else if (j == 0 || j == 1 || j == 2 && Curr_Entity->Segments.size() > 4)
-			//	{
-			//		EntityObject->setFillColor(sf::Color(Curr_Entity->colorlist[0], Curr_Entity->colorlist[1], Curr_Entity->colorlist[2], (Curr_Entity->brightness / 3)));
-			//	}
-			//	else {
-			//		EntityObject->setFillColor(sf::Color(Curr_Entity->colorlist[0], Curr_Entity->colorlist[1], Curr_Entity->colorlist[2], (Curr_Entity->brightness / 2)));
-			//	}
 				// Add to the GameObjects
 				GameObjects.push_back(EntityObject);
 			}

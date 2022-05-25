@@ -17,8 +17,8 @@ namespace GameSettings {
 
 	// How Fast eac Frame Ticks
 	const unsigned int TickSpeed = 10; // 10
-	const unsigned int BoardX = 16; // 40
-	const unsigned int BoardY = 16; // 20
+	const unsigned int BoardX = 14; // 40
+	const unsigned int BoardY = 14; // 20
 
 	const bool DisplayGUI = true;
 	const bool LoadSnake = true;

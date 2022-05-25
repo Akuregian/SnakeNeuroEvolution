@@ -16,6 +16,7 @@ namespace NeuroEvolution {
 
 		// Initialize the Snake
 		void InitializeSnake(const std::vector<MAT_D>& w1, const std::vector<VEC_D>& b1);
+		void InitializeValues();
 
 		// Vision
 		const VEC_D LookIn8Directions();
@@ -53,7 +54,8 @@ namespace NeuroEvolution {
 		int steps; // How many Steps the snake took
 		int steps_since_last_apple; // How Many steps the snake can take without eating
 		int curr_dir;
-		int colorlist[3];
+		int colorlist_1[3]; // Lerps to Color 2
+		int colorlist_2[3]; // Color 2
 		int brightness;
 
 		// Snake Body
