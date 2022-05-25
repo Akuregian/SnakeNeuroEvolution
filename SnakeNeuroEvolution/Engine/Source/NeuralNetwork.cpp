@@ -3,6 +3,7 @@
 namespace NeuroEvolution {
 
 	NeuralNetwork::NeuralNetwork()
+		: NetworkFitness(0)
 	{
 	}
 
@@ -69,7 +70,6 @@ namespace NeuroEvolution {
 		}
 	}
 
-
 	void NeuralNetwork::PrintNetworkToConsole() {
 		// ----------------Debugging-------------------
 
@@ -90,6 +90,21 @@ namespace NeuroEvolution {
 			std::cout << _Bias[i].format(Eigen::IOFormat(2, 0, ", ", "\n", "[", "]")) << "\n\n" << std::endl;
 		}
 		std::cout << std::endl;
+	}
+
+	void NeuralNetwork::TweakWeights()
+	{
+		for (int i = 0; i < _Weights.size(); i++)
+		{
+			MAT_D values = MAT_D::Random(_Weights[i].rows(), _Weights[i].cols());
+			_Weights[i] += values;
+		}
+		
+		for (int i = 0; i < _Bias.size(); i++) 
+		{
+			VEC_D values = VEC_D::Random(_Bias[i].size());
+			_Bias[i] += values;
+		}
 	}
 
 	const int& NeuralNetwork::ForwardPropagate(VEC_D& input) {

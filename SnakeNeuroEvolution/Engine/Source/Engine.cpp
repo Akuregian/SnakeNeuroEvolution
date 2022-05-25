@@ -18,6 +18,11 @@ namespace NeuroEvolution {
 		m_Population->CreatePopulationOfEntites();
 	}
 
+	void Engine::CreatePopulationOfElites()
+	{
+		m_Population->CreatePopulationOfElites();
+	}
+
 	std::vector<std::shared_ptr<NeuroEvolution::Entity>>& Engine::TrainOnce()
 	{
 		m_Population->TrainEntitiesOnce();

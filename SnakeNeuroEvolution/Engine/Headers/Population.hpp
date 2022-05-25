@@ -8,6 +8,7 @@ namespace NeuroEvolution {
 		Population();
 		~Population();
 		void CreatePopulationOfEntites();
+		void CreatePopulationOfElites();
 		std::vector<std::shared_ptr<NeuroEvolution::Entity>>& TrainEntitiesOnce();
 		void TrainEntities();
 		void CreateNextGeneration();

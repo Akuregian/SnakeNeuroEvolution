@@ -35,6 +35,8 @@ namespace NeuroEvolution {
 		// Call Population->CreateNextGeneration()
 		void CreateNextGeneration() { m_Population->CreateNextGeneration(); };
 
+		void CreatePopulationOfElites();
+
 		// Train Population Once then Send positions to Wrapper
 		std::vector<std::shared_ptr<NeuroEvolution::Entity>>& TrainOnce();
 		

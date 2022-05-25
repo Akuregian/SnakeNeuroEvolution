@@ -33,6 +33,8 @@ namespace NeuroEvolution {
 		// Logging
 		void PrintNetworkToConsole();
 
+		void TweakWeights();
+
 		// Activation Functions
 		static double Sigmoid(const double& x);
 		static double RELU(const double& x);

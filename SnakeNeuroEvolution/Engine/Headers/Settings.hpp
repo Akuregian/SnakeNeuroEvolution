@@ -17,19 +17,20 @@ namespace GameSettings {
 
 	// How Fast eac Frame Ticks
 	const unsigned int TickSpeed = 10; // 10
-	const unsigned int BoardX = 15; // 40
-	const unsigned int BoardY = 15; // 20
+	const unsigned int BoardX = 16; // 40
+	const unsigned int BoardY = 16; // 20
 
-	const bool DisplayGUI = false;
-	const bool LoadSnake = false;
+	const bool DisplayGUI = true;
+	const bool LoadSnake = true;
 	const bool ShowEntirePopulation = false;
+	const bool CreatePopulationOfElites = false;
 }
 
 namespace GeneticSettings {
 
 	// Genetic Algorithm 
-	const int POP_SIZE = 250; // 250
-	const int MATING_POP_SIZE = 500; // 500
+	const int POP_SIZE = 400; // 250
+	const int MATING_POP_SIZE = 800; // 500
 
 	// Mutation Rate
 	const double MUTATION_RATE = 0.05;

@@ -9,6 +9,7 @@ namespace Render
 		  _CellSize({ 30, 30 })
 	{
 		if (!GameSettings::LoadSnake) { m_Engine->CreatePopulation(); }
+		if (GameSettings::CreatePopulationOfElites) { ENGINE_LOGGER("Creating Pop Of Elites"); m_Engine->CreatePopulationOfElites(); }
 	}
 
 	Wrapper::~Wrapper()
@@ -64,6 +65,7 @@ namespace Render
 		// @@ Temporary @@
 		const unsigned int windowOffsetX = 600;
 		const unsigned int windowOffsetY = 25;
+		const float rate = 0.02f;
 
 		// If its Alive
 		if (Curr_Entity->isAlive) {
@@ -72,17 +74,22 @@ namespace Render
 				std::shared_ptr<sf::RectangleShape> EntityObject = std::make_shared<sf::RectangleShape>();
 				EntityObject->setSize( _CellSize );
 				EntityObject->setPosition(sf::Vector2f((Curr_Entity->Segments[j].first * _CellSize.x) + windowOffsetX - 10, (Curr_Entity->Segments[j].second * _CellSize.y) + windowOffsetY - 10));
+
+				// Change the brightness of the Head
 				if (j == Curr_Entity->Segments.size() - 1) {
-					// Change the brightness of the Head
 					EntityObject->setFillColor(sf::Color(Curr_Entity->colorlist[0], Curr_Entity->colorlist[1], Curr_Entity->colorlist[2], Curr_Entity->brightness));
 				}
-				else if (j == 0 || j == 1 || j == 2 && Curr_Entity->Segments.size() > 4)
-				{
-					EntityObject->setFillColor(sf::Color(Curr_Entity->colorlist[0], Curr_Entity->colorlist[1], Curr_Entity->colorlist[2], (Curr_Entity->brightness / 3)));
-				}
-				else {
-					EntityObject->setFillColor(sf::Color(Curr_Entity->colorlist[0], Curr_Entity->colorlist[1], Curr_Entity->colorlist[2], (Curr_Entity->brightness / 2)));
-				}
+				
+				// CurrentColor = (TargetColor - CurrentColor) * rate + CurrentColor;
+
+
+			//	else if (j == 0 || j == 1 || j == 2 && Curr_Entity->Segments.size() > 4)
+			//	{
+			//		EntityObject->setFillColor(sf::Color(Curr_Entity->colorlist[0], Curr_Entity->colorlist[1], Curr_Entity->colorlist[2], (Curr_Entity->brightness / 3)));
+			//	}
+			//	else {
+			//		EntityObject->setFillColor(sf::Color(Curr_Entity->colorlist[0], Curr_Entity->colorlist[1], Curr_Entity->colorlist[2], (Curr_Entity->brightness / 2)));
+			//	}
 				// Add to the GameObjects
 				GameObjects.push_back(EntityObject);
 			}

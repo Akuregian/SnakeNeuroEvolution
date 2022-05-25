@@ -30,6 +30,7 @@ namespace NeuroEvolution {
 
 	Entity::~Entity()
 	{
+		_Brain.reset();
 	};
 
 	void Entity::InitializeSnake(const std::vector<MAT_D>& w1, const std::vector<VEC_D>& b1)
@@ -331,16 +332,33 @@ namespace NeuroEvolution {
 		const static Eigen::IOFormat CSVFormat(Eigen::FullPrecision, Eigen::DontAlignCols, ", ", "\n");
 		std::ofstream file("../../../../SnakeNeuroEvolution/TopEntityWeights/TopSnake.csv", std::ofstream::out | std::ofstream::trunc);
 
+		// Is the File Open?
 		if (file.is_open()) {
+			// Write All Weights to file
 			for (int i = 0; i < _Brain->_Weights.size(); i++) {
 				file << _Brain->_Weights[i].format(CSVFormat) << "\n\n";
 			}
+
+			// Add "Bias" So we can find this section in the file
 			file << "Bias\n";
 			for (int i = 0; i < _Brain->_Bias.size(); i++) {
+				// Add All Bias Values
 				file << _Brain->_Bias[i] << "\n\n";
 			}
+
+			// Add "Seed" So we can find this section in the file
 			file << "Seed\n";
+			// Seed Value
 			file << seed_value;
+
+			// Save Color
+			file << "Color\n";
+			for (unsigned int i = 0; i < 3; i++)
+			{
+				file << colorlist[i];
+			}
+
+
 		}
 		file.close();
 	}

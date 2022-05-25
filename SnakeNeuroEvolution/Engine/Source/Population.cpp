@@ -16,6 +16,16 @@ namespace NeuroEvolution {
 		}
 	}
 
+	void Population::CreatePopulationOfElites()
+	{
+		for (unsigned int i = 0; i < GeneticSettings::POP_SIZE; i++)
+		{
+			LoadEntity();
+			ReplayEntity->_Brain->TweakWeights();
+			_EntityPopulation.push_back(ReplayEntity);
+		}
+	}
+
 	bool Population::isAllEntitiesDead()
 	{
 		for (unsigned int i = 0; i < _EntityPopulation.size(); i++)
