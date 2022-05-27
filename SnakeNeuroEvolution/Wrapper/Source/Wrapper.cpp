@@ -67,19 +67,19 @@ namespace Render
 		// @@ Temporary @@
 		const unsigned int windowOffsetX = 775;
 		const unsigned int windowOffsetY = 25;
-		const float rate = 0.002f;
+		const float rate = 0.005f;
 
 		// If its Alive
 		if (Curr_Entity->isAlive) {
-			float offset_r = (Curr_Entity->colorlist_2[0] - Curr_Entity->colorlist_1[0]);
+			float offset_r = std::abs((Curr_Entity->colorlist_2[0] - Curr_Entity->colorlist_1[0]));
 			float split_r = offset_r / Curr_Entity->Segments.size();
 			float temp_r = Curr_Entity->colorlist_1[0];
 
-			float offset_g = (Curr_Entity->colorlist_2[1] - Curr_Entity->colorlist_1[1]);
+			float offset_g = std::abs((Curr_Entity->colorlist_2[1] - Curr_Entity->colorlist_1[1]));
 			float split_g = offset_g / Curr_Entity->Segments.size();
 			float temp_g = Curr_Entity->colorlist_1[1];
 			
-			float offset_b = (Curr_Entity->colorlist_2[2] - Curr_Entity->colorlist_1[2]);
+			float offset_b = std::abs((Curr_Entity->colorlist_2[2] - Curr_Entity->colorlist_1[2]));
 			float split_b = offset_b / Curr_Entity->Segments.size();
 			float temp_b = Curr_Entity->colorlist_1[2];
 
