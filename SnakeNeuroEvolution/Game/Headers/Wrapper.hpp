@@ -1,7 +1,7 @@
 #pragma once
 #include "../../Engine/Headers/Engine.hpp"
 #include "SFML/Graphics.hpp"
-#include "../../Engine/Headers/Text.hpp"
+#include "../../Engine/Headers/GUI.hpp"
 
 
 namespace Render {
@@ -41,6 +41,6 @@ namespace Render {
 		TWO_DIM_V WeightLines;
 		sf::Vector2f _CellSize;
 
-		std::shared_ptr<Text::Text> _Text;
+		std::vector<std::shared_ptr<GUI::Text>> _Text;
 	};
 }

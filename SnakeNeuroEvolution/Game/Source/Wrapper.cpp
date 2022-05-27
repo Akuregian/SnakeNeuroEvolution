@@ -6,7 +6,6 @@ namespace Render
 		: m_Engine(std::make_shared<NeuroEvolution::Engine>()),
 		  m_Window(std::make_shared<sf::RenderWindow>()),
 		  m_Clock(std::make_shared<sf::Clock>()),
-		  _Text(std::make_shared<Text::Text>()),
 		  _CellSize({ 30, 30 })
 	{
 		if (!GameSettings::LoadSnake) { m_Engine->CreatePopulation(); }
@@ -177,11 +176,15 @@ namespace Render
 
 	void Wrapper::CreateTextObjects()
 	{
+		for (unsigned int i = 0; i < 4; i++)
+		{
+			_Text.push_back(std::make_shared<GUI::Text>());
+		}
 		sf::Vector2f scale(0.5, 0.5);
-		_Text->CreateTextObject("UP", sf::Vector2f(520, 350), scale, sf::Color::White);
-		_Text->CreateTextObject("DOWN", sf::Vector2f(520, 375), scale, sf::Color::White);
-		_Text->CreateTextObject("LEFT", sf::Vector2f(520, 400), scale, sf::Color::White);
-		_Text->CreateTextObject("RIGHT", sf::Vector2f(520, 425), scale, sf::Color::White);
+		_Text[0]->CreateTextObject("UP", sf::Vector2f(520, 350), scale, sf::Color::White);
+		_Text[1]->CreateTextObject("DOWN", sf::Vector2f(520, 375), scale, sf::Color::White);
+		_Text[2]->CreateTextObject("LEFT", sf::Vector2f(520, 400), scale, sf::Color::White);
+		_Text[3]->CreateTextObject("RIGHT", sf::Vector2f(520, 425), scale, sf::Color::White);
 	}
 
 	void Wrapper::ReplayAllEntities()
@@ -298,9 +301,9 @@ namespace Render
 		}
 		
 		// Draw Text Objects
-		for (unsigned int i = 0; i < _Text->textArray.size(); i++)
+		for (unsigned int i = 0; i < _Text.size(); i++)
 		{
-			m_Window->draw(*_Text->textArray[i]); // TEST
+			m_Window->draw(*_Text[i]->m_text); // TEST
 		}
 
 		m_Window->display();
