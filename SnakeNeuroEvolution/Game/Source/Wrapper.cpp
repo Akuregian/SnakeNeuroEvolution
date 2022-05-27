@@ -6,10 +6,13 @@ namespace Render
 		: m_Engine(std::make_shared<NeuroEvolution::Engine>()),
 		  m_Window(std::make_shared<sf::RenderWindow>()),
 		  m_Clock(std::make_shared<sf::Clock>()),
+		  _Text(std::make_shared<Text::Text>()),
 		  _CellSize({ 30, 30 })
 	{
 		if (!GameSettings::LoadSnake) { m_Engine->CreatePopulation(); }
 		if (GameSettings::CreatePopulationOfElites) { ENGINE_LOGGER("Creating Pop Of Elites"); m_Engine->CreatePopulationOfElites(); }
+
+		CreateTextObjects();
 	}
 
 	Wrapper::~Wrapper()
@@ -65,7 +68,7 @@ namespace Render
 		// @@ Temporary @@
 		const unsigned int windowOffsetX = 775;
 		const unsigned int windowOffsetY = 25;
-		const float rate = 0.02f;
+		const float rate = 0.002f;
 
 		// If its Alive
 		if (Curr_Entity->isAlive) {
@@ -172,6 +175,15 @@ namespace Render
 		}
 	}
 
+	void Wrapper::CreateTextObjects()
+	{
+		sf::Vector2f scale(0.5, 0.5);
+		_Text->CreateTextObject("UP", sf::Vector2f(520, 350), scale, sf::Color::White);
+		_Text->CreateTextObject("DOWN", sf::Vector2f(520, 375), scale, sf::Color::White);
+		_Text->CreateTextObject("LEFT", sf::Vector2f(520, 400), scale, sf::Color::White);
+		_Text->CreateTextObject("RIGHT", sf::Vector2f(520, 425), scale, sf::Color::White);
+	}
+
 	void Wrapper::ReplayAllEntities()
 	{
 		std::vector<std::shared_ptr<NeuroEvolution::Entity>> state;
@@ -211,6 +223,10 @@ namespace Render
 
 	void Wrapper::UpdateNetwork()
 	{
+		sf::Color PosWeights = sf::Color(171,212, 193);
+		sf::Color NegWeights = sf::Color(126, 133, 139);
+		sf::Color ActiveNode = sf::Color(193, 165, 123);
+		sf::Color NoneActiveNode = sf::Color::White;
 
 		std::shared_ptr<NeuroEvolution::Entity>& CurrEntity = m_Engine->TopEntity();
 
@@ -218,20 +234,20 @@ namespace Render
 		for (unsigned int i = 0; i < CurrEntity->_Brain->_Neurons.size(); i++) {
 			for (unsigned int j = 0; j < CurrEntity->_Brain->_Neurons[i].size(); j++) {
 				if (CurrEntity->_Brain->_Neurons[i](j) > 0) {
-					NeuronObjects[i][j]->setFillColor(sf::Color(31, 198, 0));
+					NeuronObjects[i][j]->setFillColor(ActiveNode);
 				}
 				else {
-					NeuronObjects[i][j]->setFillColor(sf::Color::White);
+					NeuronObjects[i][j]->setFillColor(NoneActiveNode);
 				}
 
 				if (i == CurrEntity->_Brain->_Neurons.size() - 1) {
 					Eigen::MatrixXd::Index Max_Coeff_Row, MaxCoeff_Col;
 					CurrEntity->_Brain->_Neurons.back().maxCoeff(&Max_Coeff_Row, &MaxCoeff_Col);
 					if (j == Max_Coeff_Row) {
-						NeuronObjects[i][j]->setFillColor(sf::Color(14, 255, 0));
+						NeuronObjects[i][j]->setFillColor(ActiveNode);
 					}
 					else {
-						NeuronObjects[i][j]->setFillColor(sf::Color::White);
+						NeuronObjects[i][j]->setFillColor(NoneActiveNode);
 					}
 				}
 			}
@@ -242,14 +258,14 @@ namespace Render
 			int index = 0;
 			for (int j = 0; j < CurrEntity->_Brain->_Weights[i].size(); j++) {
 				if (CurrEntity->_Brain->_Weights[i](j) > 0) {
-					WeightLines[i][index].color = sf::Color::Blue;
+					WeightLines[i][index].color = PosWeights;
 					index++;
-					WeightLines[i][index].color = sf::Color::Blue;
+					WeightLines[i][index].color = PosWeights;
 				}
 				else {
-					WeightLines[i][index].color = sf::Color::Red;
+					WeightLines[i][index].color = NegWeights;
 					index++;
-					WeightLines[i][index].color = sf::Color::Red;
+					WeightLines[i][index].color = NegWeights;
 				}
 				index++;
 			}
@@ -279,6 +295,12 @@ namespace Render
 				}
 				m_Window->draw(&WeightLines[i][j], 2, sf::Lines);
 			}
+		}
+		
+		// Draw Text Objects
+		for (unsigned int i = 0; i < _Text->textArray.size(); i++)
+		{
+			m_Window->draw(*_Text->textArray[i]); // TEST
 		}
 
 		m_Window->display();

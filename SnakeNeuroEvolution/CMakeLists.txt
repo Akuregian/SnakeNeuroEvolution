@@ -13,7 +13,7 @@ file(GLOB_RECURSE GAME_HEADER_FILES "Game/Headers/*.hpp")
 set(PRE_COMPILED_HEADERS "Engine/Headers/pch.hpp")
 
 # Add source to this project's executable.
-add_executable (${PROJECT_NAME} ${ENGINE_SRC_FILES} ${ENGINE_HEADER_FILES} ${GAME_SRC_FILES} ${GAME_HEADER_FILES} )
+add_executable (${PROJECT_NAME} ${ENGINE_SRC_FILES} ${ENGINE_HEADER_FILES} ${GAME_SRC_FILES} ${GAME_HEADER_FILES}  "Engine/Headers/Text.hpp" "Engine/Source/Text.cpp")
 
 # TODO: Add tests and install targets if needed.
 

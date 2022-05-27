@@ -1,6 +1,8 @@
 #pragma once
 #include "../../Engine/Headers/Engine.hpp"
 #include "SFML/Graphics.hpp"
+#include "../../Engine/Headers/Text.hpp"
+
 
 namespace Render {
 
@@ -20,6 +22,7 @@ namespace Render {
 		void CreateObjectsForAllEntities(std::vector<std::shared_ptr<NeuroEvolution::Entity>>& State);
 		void CreateObjectsForSingleEntity();
 		void CreateObjectsForNeuralNetwork();
+		void CreateTextObjects();
 
 		// Replay
 		void ReplayAllEntities();
@@ -37,5 +40,7 @@ namespace Render {
 		TWO_DIM_C NeuronObjects;
 		TWO_DIM_V WeightLines;
 		sf::Vector2f _CellSize;
+
+		std::shared_ptr<Text::Text> _Text;
 	};
 }
