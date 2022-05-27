@@ -7,8 +7,8 @@ file(GLOB_RECURSE ENGINE_SRC_FILES "Engine/Source/*.cpp")
 file(GLOB_RECURSE ENGINE_HEADER_FILES "Engine/Headers/*.hpp")
 
 # Recursive Search: Headers and Source Files in the Game
-file(GLOB_RECURSE GAME_SRC_FILES "Game/Source/*.cpp")
-file(GLOB_RECURSE GAME_HEADER_FILES "Game/Headers/*.hpp")
+file(GLOB_RECURSE GAME_SRC_FILES "Wrapper/Source/*.cpp")
+file(GLOB_RECURSE GAME_HEADER_FILES "Wrapper/Headers/*.hpp")
 
 set(PRE_COMPILED_HEADERS "Engine/Headers/pch.hpp")
 
