@@ -6,7 +6,8 @@ namespace Render
 		: m_Engine(std::make_shared<NeuroEvolution::Engine>()),
 		  m_Window(std::make_shared<sf::RenderWindow>()),
 		  m_Clock(std::make_shared<sf::Clock>()),
-		  _CellSize({ 30, 30 })
+		  _CellSize({ 30, 30 }),
+		  _CurrentGeneration(0)
 	{
 		if (!GameSettings::LoadSnake) { m_Engine->CreatePopulation(); }
 		if (GameSettings::CreatePopulationOfElites) { ENGINE_LOGGER("Creating Pop Of Elites"); m_Engine->CreatePopulationOfElites(); }
@@ -66,11 +67,12 @@ namespace Render
 
 		// @@ Temporary @@
 		const unsigned int windowOffsetX = 775;
-		const unsigned int windowOffsetY = 25;
+		const unsigned int windowOffsetY = 225;
 		const float rate = 0.005f;
 
 		// If its Alive
 		if (Curr_Entity->isAlive) {
+			// ===== Getting values for Interpolating snake color based off its length =====
 			float offset_r = std::abs((Curr_Entity->colorlist_2[0] - Curr_Entity->colorlist_1[0]));
 			float split_r = offset_r / Curr_Entity->Segments.size();
 			float temp_r = Curr_Entity->colorlist_1[0];
@@ -176,15 +178,36 @@ namespace Render
 
 	void Wrapper::CreateTextObjects()
 	{
-		for (unsigned int i = 0; i < 4; i++)
+		for (unsigned int i = 0; i < 11; i++)
 		{
 			_Text.push_back(std::make_shared<GUI::Text>());
 		}
-		sf::Vector2f scale(0.5, 0.5);
-		_Text[0]->CreateTextObject("UP", sf::Vector2f(520, 350), scale, sf::Color::White);
-		_Text[1]->CreateTextObject("DOWN", sf::Vector2f(520, 375), scale, sf::Color::White);
-		_Text[2]->CreateTextObject("LEFT", sf::Vector2f(520, 400), scale, sf::Color::White);
-		_Text[3]->CreateTextObject("RIGHT", sf::Vector2f(520, 425), scale, sf::Color::White);
+		sf::Vector2f scale(0.5f, 0.5f);
+		sf::Vector2f scale_display(0.8f, 0.8f);
+		sf::Uint32 style = sf::Text::Bold;
+		_Text[0]->CreateTextObject("UP", sf::Vector2f(520, 350), scale, sf::Color::White, style);
+		_Text[1]->CreateTextObject("DOWN", sf::Vector2f(520, 375), scale, sf::Color::White, style);
+		_Text[2]->CreateTextObject("LEFT", sf::Vector2f(520, 400), scale, sf::Color::White, style);
+		_Text[3]->CreateTextObject("RIGHT", sf::Vector2f(520, 425), scale, sf::Color::White, style);
+		_Text[4]->CreateTextObject("Snake NeuroEvolution", sf::Vector2f(400, 25), sf::Vector2f(1.5, 1.5), sf::Color::White, style);
+
+		_Text[5]->CreateTextObject("Generation:", sf::Vector2f(950, 675), scale_display, sf::Color::White, style);
+		_Text[6]->CreateTextObject("0", sf::Vector2f(1100, 675), scale_display, sf::Color::White, style);
+		_Text[7]->CreateTextObject("Score:", sf::Vector2f(950, 700), scale_display, sf::Color::White, style);
+		_Text[8]->CreateTextObject("0", sf::Vector2f(1045, 700), scale_display, sf::Color::White, style);
+		_Text[9]->CreateTextObject("Highest Score:", sf::Vector2f(950, 725), scale_display, sf::Color::White, style);
+		_Text[10]->CreateTextObject("0", sf::Vector2f(1140, 725), scale_display, sf::Color::White, style);
+	}
+
+	// Updates Text: Generation, Score, Highscore
+	void Wrapper::UpdateScoreCard(std::shared_ptr<NeuroEvolution::Entity> entity) {
+		_Text[6]->SetString(std::to_string(_CurrentGeneration));
+		_Text[8]->SetString(std::to_string(entity->score));
+		std::string string_value = _Text[10]->m_text->getString();
+		int int_value = std::stoi(string_value);
+		if (entity->score > int_value) {
+			_Text[10]->SetString(std::to_string(entity->score));
+		}
 	}
 
 	void Wrapper::ReplayAllEntities()
@@ -218,6 +241,7 @@ namespace Render
 				Wrapper::CreateObjectsForSingleEntity();
 				Wrapper::UpdateNetwork();
 				Wrapper::DrawObjects();
+				Wrapper::UpdateScoreCard(Entity);
 			}
 		}
 
@@ -282,7 +306,6 @@ namespace Render
 		for (auto& i : GameObjects) { m_Window->draw(*i); }
 
 		// Draw Neural Network, Only if were are loading a snake
-
 		for (unsigned int i = 0; i < NeuronObjects.size(); i++) {
 			for (unsigned int j = 0; j < NeuronObjects[i].size(); j++)
 			{
@@ -311,7 +334,7 @@ namespace Render
 
 	void Wrapper::Simulate()
 	{
-
+		// Display Gui && Load in the Top Snake
 		if (GameSettings::DisplayGUI || GameSettings::LoadSnake)
 		{
 			Wrapper::InitWindow();
@@ -334,6 +357,7 @@ namespace Render
 			{
 				m_Engine->TrainPopulation();
 				Wrapper::ReplayBestEntity();
+				_CurrentGeneration++;
 			}
 			// Display All Snakes
 			else if (GameSettings::DisplayGUI && GameSettings::ShowEntirePopulation && !GameSettings::LoadSnake)
@@ -351,7 +375,7 @@ namespace Render
 		while (m_Engine->CurrentGeneration() < GeneticSettings::MAX_GENERATIONS)
 		{
 			m_Engine->TrainPopulation();
-
+			_CurrentGeneration++;
 		}
 	}
 }

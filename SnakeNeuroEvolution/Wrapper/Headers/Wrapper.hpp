@@ -6,8 +6,8 @@
 
 namespace Render {
 
-	typedef std::vector<std::vector<std::shared_ptr<sf::CircleShape>>> TWO_DIM_C;
-	typedef std::vector<std::vector<sf::Vertex>> TWO_DIM_V;
+	typedef std::vector<std::vector<std::shared_ptr<sf::CircleShape>>> TWO_DIM_C; // Two-Dimension array of circleshape objects
+	typedef std::vector<std::vector<sf::Vertex>> TWO_DIM_V; // Two-Dimension array of vertex objects
 
 	class Wrapper 
 	{
@@ -31,6 +31,7 @@ namespace Render {
 		// Draw
 		void UpdateNetwork();
 		void DrawObjects();
+		void UpdateScoreCard(std::shared_ptr<NeuroEvolution::Entity> entity);
 
 	private:
 		std::shared_ptr<NeuroEvolution::Engine> m_Engine;
@@ -40,6 +41,7 @@ namespace Render {
 		TWO_DIM_C NeuronObjects;
 		TWO_DIM_V WeightLines;
 		sf::Vector2f _CellSize;
+		unsigned int _CurrentGeneration;
 
 		std::vector<std::shared_ptr<GUI::Text>> _Text;
 	};
