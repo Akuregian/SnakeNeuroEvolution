@@ -237,11 +237,12 @@ namespace Render
 			if (m_Clock->getElapsedTime().asMilliseconds() > GameSettings::TickSpeed)
 			{
 				m_Clock->restart();
-				Entity->Update();
-				Wrapper::CreateObjectsForSingleEntity();
-				Wrapper::UpdateNetwork();
-				Wrapper::DrawObjects();
-				Wrapper::UpdateScoreCard(Entity);
+				if (Entity->Update()) {
+					Wrapper::CreateObjectsForSingleEntity();
+					Wrapper::UpdateNetwork();
+					Wrapper::DrawObjects();
+					Wrapper::UpdateScoreCard(Entity);
+				}
 			}
 		}
 

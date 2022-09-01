@@ -34,10 +34,10 @@ namespace NeuroEvolution {
 		bool Move(Point& nextMove);
 
 		// Generate Random Food Location
-		void GenerateFood(Point& point);
+		bool GenerateFood(Point& point);
 
 		// Update: Increment Steps, Look(), FeedForward i.e Think(), and Select the Ouputs Direction
-		void Update();
+		bool Update();
 		bool isBodyColliding(Point& new_head_position);
 		bool isOutsideBoundaries(Point& new_head_position);
 		bool isValidMove(Point& new_head_position);

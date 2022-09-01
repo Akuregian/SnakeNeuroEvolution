@@ -54,7 +54,7 @@ namespace NeuroEvolution {
 	{
 		this-> isAlive = true;
 		this->lifeSpan = 100; 
-		this->score = 0; 
+		this->score = 0;
 		this->steps = 0; 
 		this->steps_since_last_apple = 0; 
 		this->curr_dir = 4;
@@ -155,7 +155,7 @@ namespace NeuroEvolution {
 			score++;
 			steps_since_last_apple = 0;
 			Segments.push_back(NewHeadPosition);
-			GenerateFood(TargetFood);
+			if (!GenerateFood(TargetFood)) { return false; }
 		}
 		else 
 		{
@@ -177,9 +177,9 @@ namespace NeuroEvolution {
 		}
 	}
 
-	void Entity::GenerateFood(Point& point)
+	bool Entity::GenerateFood(Point& point)
 	{
-		SET_SEED(seed_value); // @@@WHY DO I HAVE TO RE_SET THE SEED?@@@
+		SET_SEED(seed_value); // @@@WHY DO I HAVE TO RESET THE SEED?@@@
 		std::deque<Point> possiblitlies;
 		for (int i = 0; i < GameSettings::BoardY; i++) {
 			for (int j = 0; j < GameSettings::BoardX; j++) {
@@ -192,20 +192,22 @@ namespace NeuroEvolution {
 
 		// TODO: Not the Most Elegent Solution... Can be Reworked
 		if (possiblitlies.size() <= 0) {
-		//	if (!isReplayEntity)
-		//	{
+			if (!isReplayEntity)
+			{
 				ENGINE_LOGGER("Saved Weights");
-				SaveWeights();
-				std::cin.get();
-		//	}
-			
-			ENGINE_LOGGER("Didn't Save Weights");
-			std::cin.get();
+				SaveWeights(); 
+				std::cin.get(); // NEED TO CHANGE THIS
+				return false;
+
+			}
+			std::cin.get(); // NEED TO CHANGE THIS
+			return false;
 		}
 		int random = std::uniform_int_distribution<int>(0, possiblitlies.size() - 1)(Seed::GetInstance()->m_Generator);
 		Point randPoint = possiblitlies[random];
 		Point FoodLocation = std::make_pair(randPoint.first, randPoint.second);
 		point = FoodLocation;
+		return true;
 	}
 
 	const VEC_D Entity::CurrentDirection()
@@ -278,7 +280,7 @@ namespace NeuroEvolution {
 		input_vector = input;
 	}
 
-	void Entity::Update()
+	bool Entity::Update()
 	{
 		if (isAlive)
 		{
@@ -289,8 +291,10 @@ namespace NeuroEvolution {
 			if (!Move(nextMove))
 			{
 				isAlive = false;
+				return false;
 			}
 		}
+		return true;
 	}
 
 	bool Entity::isBodyColliding(Point& new_head_position)

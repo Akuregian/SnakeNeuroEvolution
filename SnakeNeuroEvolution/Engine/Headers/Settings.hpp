@@ -16,12 +16,12 @@ namespace WindowSettings {
 namespace GameSettings {
 
 	// How Fast eac Frame Ticks
-	const unsigned int TickSpeed = 25; // 10
+	const unsigned int TickSpeed = 10; // 10
 	const unsigned int BoardX = 14; // 40
 	const unsigned int BoardY = 14; // 20
 
 	const bool DisplayGUI = true;
-	const bool LoadSnake = false;
+	const bool LoadSnake = true;
 	const bool ShowEntirePopulation = false;
 	const bool CreatePopulationOfElites = false;
 }
