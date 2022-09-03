@@ -1,8 +1,8 @@
 
 **If Cloning Repository: git --recursive-submodules PATH_TO_GIT_REPO**
 
-[![Watch the video](https://www.youtube.com/watch?v=uu1r35r0DSs&t=240s)
-
+[![Watch the video]()
+[![Watch the video](https://i.imgur.com/vKb2F1B.png)]([https://youtu.be/vt5fpE0bzSY](https://www.youtube.com/watch?v=uu1r35r0DSs&t=240s))
 
 
 <pre>
