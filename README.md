@@ -9,6 +9,8 @@ https://user-images.githubusercontent.com/44350860/188291700-c7dcc083-3082-4156-
 
 
 
+# Snake Neuro Evolution  
+## Structure:  
 <pre>
 Engine Class
 	 |		Genetic Algorithm (Base Class)
