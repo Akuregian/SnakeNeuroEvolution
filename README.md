@@ -27,9 +27,9 @@ Wrapper(GUI-Interface)
 </pre>
 
 
-This program implments a Neural Network, coupled with a genetic algorithm to evolve Snake Entities to learn and beat the game.
+This program implements a Neural Network, coupled with a genetic algorithm to evolve Snake Entities to learn and beat the game.
 A Neural Network class is created and placed inside a Snake. A Population of these snakes are instantiated and passed to the Genetic Algorithm Class 
-which trains the snakes until they have all died. At which point the results are sent to the Engine, which is picked up by the wrapper class and 
+which trains the snakes until they have all died. At which point the results are sent to the Engine, which is picked up by the wrapper class and then
 displays the results.
 
 
