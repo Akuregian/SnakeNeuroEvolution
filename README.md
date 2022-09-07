@@ -4,7 +4,7 @@
 
 [Watch the full video](https://www.youtube.com/watch?v=uu1r35r0DSs&t=240s)
 
-## How to use
+## How To Begin Training
 ```c++
 #include "../Headers/Wrapper.hpp"
 
