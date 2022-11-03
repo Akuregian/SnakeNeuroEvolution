@@ -52,4 +52,5 @@ This is known as Natural Selection and is how the snakes learn to complete the g
 - when snakes are training, display "Training Snakes Population" with a display showing the progress. This could be a Percentage of the (total_pop/total_dead)  
 - Display a small thin box around the playing grid?
 
-
+![NeuroEvolutionEngine (1)](https://user-images.githubusercontent.com/44350860/199628336-91f8ccf1-e268-49e4-b14d-692f4bab02e5.jpg)
+![NeuroEvolutionEngine (2)](https://user-images.githubusercontent.com/44350860/199628339-f833780e-e780-4244-9383-80b7e71ad409.jpg)
